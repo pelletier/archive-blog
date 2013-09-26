@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Gunicorn / Django Debian init script</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Gunicorn / Django Debian init script <a href="/2010/05/gunicorn-django-debian-init-script/">»</a></h1>
+        </div>
+        <p class="date">Published on May 09, 2010.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>This is a simple Debian init.d script for my self-hosted Django/Gunicorn
+websites. Note that it runs inside a virtualenv (my installed Django versions
+are different in each virtualenv). If you have questions: comment this post! </p>
+<div class="highlight"><pre><span class="c">#!/bin/sh </span>
+
+<span class="c">### BEGIN INIT INFO</span>
+<span class="c"># Provides:       seismic_web</span>
+<span class="c"># Required-Start: $local_fs $syslog</span>
+<span class="c"># Required-Stop:  $local_fs $syslog</span>
+<span class="c"># Default-Start:  2 3 4 5</span>
+<span class="c"># Default-Stop:   0 1 6</span>
+<span class="c"># Short-Description: Gunicorn processes for seismic_web</span>
+<span class="c">### END INIT INFO</span>
+
+<span class="c"># www-data is the default www user on debian</span>
+<span class="nv">USER</span><span class="o">=</span>www-data
+<span class="nv">NAME</span><span class="o">=</span><span class="s2">&quot;seismic_web&quot;</span>
+<span class="nv">GUNICORN_RUN</span><span class="o">=</span><span class="s2">&quot;gunicorn_django&quot;</span>
+<span class="c"># Confdir: the Django project inside the virtualenv</span>
+<span class="nv">CONFDIR</span><span class="o">=</span><span class="s2">&quot;/home/thomas/seismic_web/seismic_web&quot;</span>
+<span class="nv">VENV_ACTIVATION</span><span class="o">=</span><span class="s2">&quot;. ../bin/activate&quot;</span>
+<span class="nv">RETVAL</span><span class="o">=</span>0
+<span class="c"># PID: I always name my gunicorn pidfiles this way</span>
+<span class="nv">PID</span><span class="o">=</span><span class="s2">&quot;/tmp/gunicorn_&quot;</span><span class="nv">$NAME</span><span class="s2">&quot;.pid&quot;</span>
+
+<span class="c"># source function library</span>
+. /lib/lsb/init-functions
+
+
+start<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Starting $NAME.&quot;</span>
+    <span class="nb">cd</span> <span class="nv">$CONFDIR</span>;
+    su -c <span class="s2">&quot;$VENV_ACTIVATION; $GUNICORN_RUN&quot;</span> <span class="nv">$USER</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;failed&quot;</span>;
+<span class="o">}</span>
+
+stop<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Stopping $NAME&quot;</span>
+    <span class="nb">kill</span> -QUIT <span class="sb">`</span>cat <span class="nv">$PID</span><span class="sb">`</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;failed&quot;</span>;
+<span class="o">}</span>
+
+reload<span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">&quot;Reloading $NAME:&quot;</span>
+    <span class="k">if</span> <span class="o">[</span> -f <span class="nv">$PID</span> <span class="o">]</span>
+    <span class="k">then </span><span class="nb">kill</span> -HUP <span class="sb">`</span>cat <span class="nv">$PID</span><span class="sb">`</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;OK&quot;</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">&quot;failed&quot;</span>;
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+<span class="k">case</span> <span class="s2">&quot;$1&quot;</span> in
+    start<span class="o">)</span>
+        start
+        ;;
+    stop<span class="o">)</span>
+        stop
+        ;;
+    restart<span class="o">)</span>
+        reload
+        ;;
+    reload<span class="o">)</span>
+        reload
+        ;;
+    force-reload<span class="o">)</span>
+        stop <span class="o">&amp;&amp;</span> start
+        ;;
+    *<span class="o">)</span>
+        <span class="nb">echo</span> <span class="s2">$&quot;Usage: $0 {start|stop|restart}&quot;</span>
+        <span class="nv">RETVAL</span><span class="o">=</span>1
+<span class="k">esac</span>
+<span class="nb">exit</span> <span class="nv">$RETVAL</span>
+</pre>
+</div>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

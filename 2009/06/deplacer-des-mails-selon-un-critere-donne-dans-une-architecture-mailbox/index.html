@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Déplacer des mails selon un critère donné dans une architecture Mailbox</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Déplacer des mails selon un critère donné dans une architecture Mailbox <a href="/2009/06/deplacer-des-mails-selon-un-critere-donne-dans-une-architecture-mailbox/">»</a></h1>
+        </div>
+        <p class="date">Published on June 17, 2009.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>Aujourd&#39;hui, j&#39;ai décidé d&#39;utiliser les services de <a href="http://www.alwaysdata.com/">mon
+hébergeur</a> afin de gérer mes mails.  Le switch se
+passe bien, à un détail près : les
+<a href="http://fr.wikipedia.org/wiki/Newsgroup">newsgroups</a>. Je suis abonné au groupe
+<a href="http://groups.google.com/group/django-developers">django-developers</a> des
+<a href="http://groups.google.com/">Google groups</a>. Le problème, c&#39;est que c&#39;est
+environ 15 mails de plus dans mon inbox tous les jours. Sur
+<a href="http://mail.google.com/">Gmail</a>, j&#39;utilisais un filtre. Pourquoi pas là ?</p>
+
+<p>Me voila donc partit pour lire les bases de l&#39;utilisation de <a href="http://fr.wikipedia.org/wiki/Sieve/">Script
+Sieve</a> afin de gérer côté serveur les
+filtres. Après 3 minutes de recherche, voici le &quot;script&quot; :</p>
+<div class="highlight"><pre>if header :contains &quot;Reply-To&quot; &quot;django-developers@googlegroups.com&quot; {fileinto &quot;Django-dev&quot;;}
+</pre>
+</div>
+
+<p>Hop. Mais, quid des emails déjà reçus ? Tant qu&#39;à les filtrer, autant tous les
+ranger au même endroit. Et c&#39;est après bien 20 / 25 minutes de recherche que me
+voilà prêt avec un gentil petit script bash :</p>
+<div class="highlight"><pre><span class="c">#!/bin/bash</span>
+
+<span class="nb">cd </span>mail/kiznet.fr/thomas/cur/
+<span class="nv">FILES</span><span class="o">=</span><span class="s2">&quot;*&quot;</span>
+
+<span class="k">for </span>f in <span class="nv">$FILES</span>
+<span class="k">do</span>
+<span class="k">    </span><span class="nv">result</span><span class="o">=</span><span class="k">$(</span>cat <span class="nv">$f</span> | grep -i reply-to<span class="k">)</span>
+    <span class="k">if</span> <span class="o">[[</span> <span class="nv">$result</span> <span class="o">=</span>~ <span class="s2">&quot;django-developers@googlegroups.com&quot;</span> <span class="o">]]</span>; <span class="k">then</span>
+<span class="k">        </span><span class="nb">echo</span> <span class="s2">&quot;Processing $f file...&quot;</span>
+        mv <span class="nv">$f</span> mail/kiznet.fr/thomas/.Django-dev/cur/
+    <span class="k">fi</span>
+
+<span class="k">done</span>
+</pre>
+</div>
+
+<p>Et voilà. Le script regarde chaque fichier présent dans l&#39;inbox. Il regarde si
+il trouve  un champs <code>reply-to</code> ayant pour valeur
+<code>django-developers@googlegroups.com</code> (marque de tous les mails venant du
+groupe). Si il trouve, il déplace dans le dossier approprié (<code>Django-dev</code> chez
+moi).</p>
+
+<p>En espérant que ces petits scripts pourront être utiles à quelques uns.
+Bonne journée.</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Time Machine, FreeBSD and AFP are on a little boat</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Time Machine, FreeBSD and AFP are on a little boat <a href="/2010/01/time-machine-freebsd-and-afp-are-on-a-little-boat/">»</a></h1>
+        </div>
+        <p class="date">Published on January 11, 2010.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p><strong>Warning: This post is outdated! Here is a <a href="http://thomas.pelletier.im/2012/01/freebsd-afp-timemachine-updated/">newer
+version</a>.</strong></p>
+
+<p>Okay, I just had set up a backup system from a MacBookPro (let&#39;s say, the
+client) to a FreeBSD-powered server (quite boringly, the server).  I chose Time
+Machine because of it&#39;s nice and polished interface and its deep integration
+with OSX. After a lot of (too much?) tries and spent time, I chose the AFP for
+the protocol between the two machines. I decided to write this post because
+there are plenty of <strong>outdated</strong> posts on the web concerning this setup, and
+I didn&#39;t manage to hit my goal with them. So my post relates a way which works
+for <em>me</em>.</p>
+<h2 id="on-the-freebsd-server">On the FreeBSD server <a href="#on-the-freebsd-server">»</a></h2><h3 id="afp-service">AFP service <a href="#afp-service">»</a></h3>
+<p>The AFP protocol is provided by NetATalk, a free AFP implementation. Let&#39;s
+install it with the ports tree:</p>
+<div class="highlight"><pre><span class="nb">cd</span> /usr/ports/net/netatalk/ <span class="o">&amp;&amp;</span> make install clean
+</pre>
+</div>
+
+<p>Add it to your configuration: add the following to <code>/etc/rc.conf</code>:</p>
+<div class="highlight"><pre><span class="nv">netatalk_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+<span class="nv">afpd_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+</pre>
+</div>
+
+<p>Define an obscure setting in <code>/usr/local/etc/afpd.conf</code>:</p>
+<div class="highlight"><pre><span class="s2">&quot;Time Machine&quot;</span> -uamlist uams_dhx2.so
+</pre>
+</div>
+
+<p>Add your Time Machine share into <code>/usr/local/etc/AppleVolumes.default</code> (edit to
+make it fits your needs):</p>
+<div class="highlight"><pre>/storage/timemachine/    <span class="s2">&quot;Time Machine&quot;</span> allow:thomas
+</pre>
+</div>
+
+<p>Finally start the service:</p>
+<div class="highlight"><pre>/usr/local/etc/rc.d/netatalk start
+</pre>
+</div>
+<h3 id="howl-optional">Howl (optional) <a href="#howl-optional">»</a></h3>
+<p>Howl is a free implementation of the Apple&#39;s Bonjour protocol. It is used to
+spread hostnames and shares on your network. You don&#39;t really <em>need</em> it, but
+I think it&#39;s smarter to use it.</p>
+
+<p>Install by the ports tree:</p>
+<div class="highlight"><pre><span class="nb">cd</span> /usr/ports/net/howl/ <span class="o">&amp;&amp;</span> make install clean
+</pre>
+</div>
+
+<p>Add to the configuration (<code>/etc/rc.conf</code>):</p>
+<div class="highlight"><pre><span class="na">mdnsresponder_enable</span><span class="o">=</span><span class="s">&quot;YES&quot;</span>
+<span class="na">mdnsresponder_flags</span><span class="o">=</span><span class="s">&quot;-f /usr/local/etc/mDNSResponder.conf&quot;</span>
+</pre>
+</div>
+
+<p>Create the configuration file <code>/usr/local/etc/mDNSResponder.conf</code> and fill it:</p>
+<div class="highlight"><pre><span class="s2">&quot;Home Time Machine Server&quot;</span>     _afpovertcp._tcp     local.     548
+</pre>
+</div>
+
+<p>Start the service:</p>
+<div class="highlight"><pre>/usr/local/etc/rc.d/mdnsresponder start
+</pre>
+</div>
+<h2 id="needed-steps-on-the-client">Needed steps on the client <a href="#needed-steps-on-the-client">»</a></h2><h3 id="unsupported-network-volumes">Unsupported Network Volumes <a href="#unsupported-network-volumes">»</a></h3>
+<p>By default, Time Machine only allows you to use an AirPort-based system if you
+want to backup your data throught your network. So we need to ask it politely
+to enable the support for every network drive. Grab your terminal and type:</p>
+<div class="highlight"><pre>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1
+</pre>
+</div>
+<h3 id="the-sparsebundle-image">The sparsebundle image <a href="#the-sparsebundle-image">»</a></h3>
+<p><a href="http://jakub.fedyczak.net/post/28">source of this part</a></p>
+
+<p>Since filesystem provided by FreeBSD is not quite compatible with Time Machine,
+you have to create your own file system image. Use Disk Utility to create
+image:</p>
+
+<ul>
+<li>Save As: MachineNameMacAddress (MachineName as read from &quot;System Preferences
+/ Sharing / Computer Name field&quot;. MacAddress has to be ethernet address of
+en0 - as displayed in <code>ifconfig en0</code> result in ethernet line - without
+colons. For example: <code>jf010203040506</code>. Always use ethernet interface.
+Wireless interface won&#39;t work.)</li>
+<li>Name: Time Machine</li>
+<li>Size: Custom - greater than your HD size (in fact, it&#39;s the amount of disk
+space you want to allow to your backups)</li>
+<li>Format: I use Mac OS Extended (Journaled) but I&#39;m not sure which one is the
+best.</li>
+<li>Partitions: Single partition - Apple partition map</li>
+<li>Image format: sparse bundle disk image</li>
+</ul>
+
+<p>Resulting file should have .sparsebundle extension. Copy it to your remote
+FreeBSD drive and you&#39;re done.</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

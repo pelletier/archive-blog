@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Django : Python, c'est plus fort que toi !</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Django : Python, c'est plus fort que toi ! <a href="/2008/11/django-python-cest-plus-fort-que-toi/">»</a></h1>
+        </div>
+        <p class="date">Published on November 21, 2008.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>Aujourd&#39;hui&#39;&#39;hui, je vais vous présenter <a href="http://www.djangoproject.com/">Django</a>, &quot;Le framework web pour les perfectionnistes sous pression&quot; ! Avouez que c&#39;&#39;est déjà pas mal comme slogan.
+Je vais parler ici de mon expérience personnelle d&#39;amateur qui pratique l&#39;&#39;informatique sur son temps libre. Donc tout ce que je peux raconter ici peut apparaître totalement FAUX à un expert en la matière, mais bon, faut bien se lancer un jour hein :) .
+<h2>Les fondations</h2>
+Comment creuser la base, ou la mise en place du framework dans un environnement <a href="http://fr.wikipedia.org/wiki/Linux">Linux</a> / <a href="http://httpd.apache.org/">Apache 2</a> / <a href="http://www-fr.mysql.com/">Mysql 5</a>.</p>
+
+<p>Pour ma part, je réalise tout mes essais sur mon serveur (enfin, c&#39;est plutôt ronflant comme nom, il ne s&#39;agit que d&#39;&#39;un Pentium 2 avec 18Go de disque dur qui fait un bruit d&#39;&#39;enfer hein) qui tourne sous <a href="http://www.debian.org/index.fr.html">Debian</a> (<a href="http://www.debian.org/releases/testing/">Lenny</a>). Pour l&#39;&#39;installation, il m&#39;a suffit d&#39;installer le module Python pour Apache (facilement grâce à Aptitude). J&#39;ai ensuite installé Django en lui même (ce qui se résume à télécharger la version en cours de développement puis créer 2-3 liens symboliques, du gâteau quoi), puis paramétrer mon httpd.conf (de même, processus très simple grâce à la <a href="http://www.django-fr.org/documentation/install/">très bonne documentation</a> très bien traduite par <a href="http://www.biologeek.com">David Larlet</a>. Résultat, en partant de rien, un framework fonctionnel disponible en production en tout juste 5 petites minutes.</p>
+
+<h2>Le commencement</h2>
+
+<p>Où on s&#39;assoit bien droit correctement sur sa chaise, qu&#39;on retrousse ses manches, réajuste ses lunettes, ferme toutes les applications autres que le navigateur, et qu&#39;on ferme la porte du bureau.</p>
+
+<p>J&#39;ai encore été agréablement surpris : la documentation est abondante. D&#39;une part, la doc&#39; du <a href="http://www.djangoproject.com/documentation/">site officiel</a> qui couvre un très grosse partie et qui permet de bien dégrossir le travail. Ensuite, cette même documentation (et un peu plus) traduite sur <a href="http://www.django-fr.org/documentation/">Django-fr</a>. Finalement, je suis tombé sur <a href="http://www.djangobook.com/en/1.0/">The Django Book</a> (aussi disponible en <a href="http://www.amazon.com/Definitive-Guide-Django-Development-Right/dp/1590597257">livre papier</a>). De toute façon, la communauté est loin d&#39;être minime, et <a href="http://www.google.com">Google</a> is your (only?) friend, donc pas de quoi s&#39;inquiéter.</p>
+
+<p>Au bout d&#39;&#39;une quarantaine de minutes, on réalise une application de votes fonctionnelle (sobre, mais efficace), le tout avec très peu de code et le moteur proprement séparé de l&#39;affichage. Que du bonheur !</p>
+
+<h2>Oui mais non !</h2>
+
+<p><em>&quot;Un cri retentit dans la salle de bains...&quot; (Tribulations, Chapitre 2, Verset XVI)</em>
+Que du bonheur mais ... sans compter un petit problème (que je n&#39;&#39;ai pas réussit à résoudre, mais je cherche encore !) : la gestion des accents et de l&#39;<a href="http://fr.wikipedia.org/wiki/UTF-8">UTF-8</a> dans l&#39;&#39;interface d&#39;&#39;administration auto générée. En effet, Django vous génère une interface permettant l&#39;&#39;administration de la base de donnée suivant les modèles que vous avez définit dans votre application, le tout de manière sobre et fonctionnelle. Pour ma part, un problème intervient au moment où je veux utiliser des accents dans du texte, là, il aime pas ! Mais je pense que le problème vient de moi de toute façon.
+<h2>Au final</h2>
+Pour le moment, je ne dispose pas encore d&#39;&#39;assez d&#39;&#39;éléments pour juger et émettre un point de vue plus approfondit sur Django, mais pour l&#39;instant, voici mon bilan : Un gain de temps inimaginable : très peu de code, si les modèles de données sont bien pensés dès le départ, tout va tout seul. Des templates pratiques : Ils permettent d&#39;&#39;étendre d&#39;autres templates, de pouvoir émettre des valeurs par défaut et remplaçables avec des systèmes de blocs. Propreté : Le code généré est très propre, ainsi que la séparation entre les structures et l&#39;interface. Seul point négatif pour le moment : ce problème d&#39;accents.</p>
+
+<p><strong>Le mot de la fin :</strong> Je vais bientôt prendre un hébergement <a href="http://www.ovh.com/fr/particulier/produits/60gp.xml">60GP</a> chez <a href="http://www.ovh.com">OVH</a>. Mon but sera d&#39;&#39;y développer mon espace perso (un blog surtout), en utilisant uniquement Django. Je vais tenir au courant de comment tout cela se passe.</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Script Perl Edition de ID3 massive</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Script Perl Edition de ID3 massive <a href="/2008/11/script-perl-edition-de-id3-massive/">»</a></h1>
+        </div>
+        <p class="date">Published on November 21, 2008.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>Je le met là comme mémo, même si il ne sert jamais à personne dans son
+intégralité.  C&#39;est un script Perl qui m&#39;a servit à renommé toute ma playlist
+d&#39;XMMS, dont les fichiers étaient sous forme <code>nn_cccc_cccc_ccc.mp3</code> (où nn est
+un nombre et ccc_cccc_ccc le titre de la chanson). Le nom de l&#39;auteur et
+l&#39;album sont des données fixes. Bien sûr, il y a sûrement mieux comme méthode
+pour effectuer cette tâche, mais cela m&#39;a permis d&#39;en apprendre un peu plus sur
+la programmation en langage Perl. La prochaine fois, j&#39;essayerais en Python ;)</p>
+<div class="highlight"><pre><span class="c1">#!/usr/bin/perl</span>
+<span class="k">use</span> <span class="nn">Xmms::</span><span class="n">Remote</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">MP3::</span><span class="n">Tag</span><span class="p">;</span>
+
+<span class="k">sub </span><span class="nf">set_tag</span> <span class="p">{</span>
+    <span class="k">my</span> <span class="nv">$file</span> <span class="o">=</span> <span class="nb">shift</span> <span class="nv">@_</span><span class="p">;</span>
+    <span class="k">my</span> <span class="nv">$tag</span>  <span class="o">=</span> <span class="nb">shift</span> <span class="nv">@_</span><span class="p">;</span>
+    <span class="k">my</span> <span class="nv">$mp3</span> <span class="o">=</span> <span class="nn">MP3::</span><span class="n">Tag</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+    <span class="k">print</span> <span class="n">Dumper</span> <span class="nv">$tag</span><span class="p">;</span>
+    <span class="k">my</span> <span class="nv">$tags</span> <span class="o">=</span> <span class="nv">$mp3</span><span class="o">-&gt;</span><span class="n">get_tags</span><span class="p">();</span>
+    <span class="k">my</span> <span class="nv">$id3v2</span><span class="p">?</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nb">ref</span> <span class="nv">$tags</span> <span class="ow">eq</span> <span class="s">&#39;&#39;</span><span class="n">HASH</span><span class="s">&#39;&#39;</span> <span class="o">&amp;&amp;</span> <span class="nb">exists</span> <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">ID3v2</span><span class="p">})</span> <span class="p">{</span>
+        <span class="nv">$id3v2</span> <span class="o">=</span> <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">ID3v2</span><span class="p">};</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$id3v2</span> <span class="o">=</span> <span class="nv">$mp3</span><span class="o">-&gt;</span><span class="n">new_tag</span><span class="p">(</span><span class="s">&quot;ID3v2&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">my</span> <span class="nv">%old_frames</span> <span class="o">=</span> <span class="nv">%</span><span class="p">{</span><span class="nv">$id3v2</span><span class="o">-&gt;</span><span class="n">get_frame_ids</span><span class="p">()};</span>
+    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$fname</span> <span class="p">(</span><span class="nb">keys</span> <span class="nv">%$tag</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$id3v2</span><span class="o">-&gt;</span><span class="n">remove_frame</span><span class="p">(</span><span class="nv">$fname</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">exists</span> <span class="nv">$old_frames</span><span class="p">{</span><span class="nv">$fname</span><span class="p">};</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$fname</span> <span class="ow">eq</span> <span class="s">&#39;&#39;</span><span class="n">WXXX</span><span class="s">&#39;&#39;</span><span class="p">){</span>
+            <span class="nv">$id3v2</span><span class="o">-&gt;</span><span class="n">add_frame</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="n">WXXX</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="n">ENG</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="n">FreeDB</span> <span class="n">URL</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">WXXX</span><span class="p">})</span> <span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">elsif</span> <span class="p">(</span><span class="nv">$fname</span> <span class="ow">eq</span> <span class="s">&#39;&#39;</span><span class="n">COMM</span><span class="s">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$id3v2</span><span class="o">-&gt;</span><span class="n">add_frame</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="n">COMM</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="n">ENG</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="n">Comment</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">COMM</span><span class="p">})</span> <span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="nv">$id3v2</span><span class="o">-&gt;</span><span class="n">add_frame</span><span class="p">(</span><span class="nv">$fname</span><span class="p">,</span> <span class="nv">$tag</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$fname</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nv">$id3v2</span><span class="o">-&gt;</span><span class="n">write_tag</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nv">$xmms_remote</span> <span class="o">=</span> <span class="nn">Xmms::</span><span class="n">Remote</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">();</span>
+<span class="nv">@list</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$xmms_remote</span><span class="o">-&gt;</span><span class="n">get_playlist_files</span><span class="p">};</span>
+<span class="k">foreach</span> <span class="nv">$el</span> <span class="p">(</span><span class="nv">@list</span><span class="p">){</span>
+    <span class="nv">$orig</span> <span class="o">=</span> <span class="nv">$el</span><span class="p">;</span>
+    <span class="nv">$file_mp3</span> <span class="o">=</span> <span class="nn">MP3::</span><span class="n">Tag</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">(</span><span class="nv">$el</span><span class="p">);</span>
+    <span class="nv">$file_mp3</span><span class="o">-&gt;</span><span class="n">get_tags</span><span class="p">();</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">exists</span> <span class="nv">$file_mp3</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">ID3v1</span><span class="p">}){</span>
+        <span class="c1">#On prend que les fichiers qui n&#39;&#39;ont pas de tags</span>
+    <span class="p">}</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$el</span> <span class="o">=~</span><span class="sr"> /^[\/[a-z0-9_]+\/]*([0-9_]){2}_(.+)\.mp3$/i</span><span class="p">){</span>
+        <span class="nv">$track_num</span> <span class="o">=</span> <span class="nv">$1</span><span class="p">;</span>
+        <span class="nv">$name</span> <span class="o">=</span> <span class="nv">$2</span><span class="p">;</span>
+        <span class="nv">@tmp</span> <span class="o">=</span> <span class="nb">split</span><span class="p">(</span><span class="sr">/_/</span><span class="p">,</span><span class="nv">$name</span><span class="p">);</span>
+        <span class="nv">$counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">foreach</span> <span class="nv">$mot</span> <span class="p">(</span><span class="nv">@tmp</span><span class="p">){</span>
+            <span class="nv">@tmp</span><span class="p">[</span><span class="nv">$counter</span><span class="p">]</span> <span class="o">=</span> <span class="nb">ucfirst</span><span class="p">(</span><span class="nv">$mot</span><span class="p">);</span>
+            <span class="nv">$counter</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$name</span> <span class="o">=</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">,</span><span class="nv">@tmp</span><span class="p">);</span>
+        <span class="k">print</span> <span class="nv">$name</span> <span class="o">.</span> <span class="s">&quot;\n&quot;</span><span class="p">;</span>
+        <span class="nv">$artist</span> <span class="o">=</span> <span class="s">&quot;Nobuo Uematsu&quot;</span><span class="p">;</span>
+        <span class="nv">$album</span> <span class="o">=</span> <span class="s">&quot;Final Fantasy X&quot;</span><span class="p">;</span>
+        <span class="nv">$tags</span> <span class="o">=</span> <span class="p">{};</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TIT2</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$name</span><span class="p">;</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TPE1</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$artist</span><span class="p">;</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TALB</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$album</span><span class="p">;</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TRCK</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$track_num</span><span class="p">;</span>
+        <span class="n">set_tag</span><span class="p">(</span><span class="nv">$orig</span><span class="p">,</span><span class="nv">$tags</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nv">$count</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

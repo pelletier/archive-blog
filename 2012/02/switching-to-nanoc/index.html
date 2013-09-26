@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Switching to nanoc, and more</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Switching to nanoc, and more <a href="/2012/02/switching-to-nanoc/">»</a></h1>
+        </div>
+        <p class="date">Published on February 25, 2012.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>I started using a static website generator about a year ago. I really don&#39;t
+regret the switch: working with text files and don&#39;t having to worry about
+a sloppy, often poorly written blogging application is really nice. I have
+always been using <a href="http://ringce.com/hyde">Jekyll</a>. Though it does its job quite well, I started
+needing to write dirty hacks to make it work exactly the way I want.  So after
+a year, I decided to take a look at the other static website generators. I tried
+<a href="http://ringce.com/hyde">Hyde</a> (Jekyll&#39;s Python counterpart) and <a href="http://pelican.readthedocs.org/">Pelican</a>. None of them was really
+fitting my needs, and they all resulted in some more hacks.</p>
+
+<p>Then, I found <a href="http://nanoc.stoneship.org/">nanoc</a>.</p>
+
+<p>I&#39;s a really powerful static website generator written in Ruby. It is a bit
+harder to get along with than the others, yet it turns out to be really
+powerful: it leverages Ruby to provide a DSL used to set up a clever <a href="http://nanoc.stoneship.org/docs/4-basic-concepts/#rules">set of
+rules</a> defining how your content will be compiled and where it will be placed
+afterwards.</p>
+
+<p>After a quick trial, I decided to start generating my website with nanoc, and to
+make a few changes I wanted to do for a while. I began by relocating some files
+and creating a year / month directory structure for the articles on the blog.
+Then I ran some scripts to tweak of some things in the source code (URLs,
+headings and so on) and wrote a few lines of Ruby code to run some optimizers
+(such as YUI compressor). Here is the final <a href="https://github.com/pelletier/blog/blob/master/Rules">Routes file</a>. If you want more,
+the <a href="https://github.com/pelletier/blog/">website source</a> is on GitHub.</p>
+
+<p>Finally, I decided to implement the only feature I was missing from the time
+I was using a dynamic platform (<a href="http://wordpress.org/">Wordpress</a> especially). It&#39;s the ability to
+quickly edit an article (usually to fix a typo). Most of the time, I&#39;m not in
+front of my computer when I want to quickly edit a post. Even if I am, I have to
+open a terminal, switch to the correct <a href="http://beginrescueend.com/deployment/best-practices/">RVM</a> gemset, edit the post, and run
+git-commit. That&#39;s quite a lot of work, just to add a missing s. I know this
+workflow could be reduced, but not as much as would like.</p>
+
+<p>So here is what I decided to do: leverage GitHub&#39;s built-in text editor to edit
+my content online, without having to worry about the computer I&#39;m on. So I wrote
+a simple Ruby script, which starts the built-in server of <a href="http://www.sinatrarb.com/">Sinatra</a> and wait
+for the request of a GitHub <a href="http://help.github.com/post-receive-hooks/">post-receive hook</a>. It then pulls the GitHub
+repository, compiles using nanoc and move the file on the web server. Here is
+the <a href="https://github.com/pelletier/blog/blob/master/build.rb">build.rb</a> file:</p>
+<div class="highlight"><pre><span class="nb">require</span> <span class="s1">&#39;sinatra&#39;</span>
+
+<span class="vg">$output_dir</span> <span class="o">=</span> <span class="s2">&quot;/home/thomas/www/thomas&quot;</span>
+<span class="vg">$logs_dir</span> <span class="o">=</span> <span class="s2">&quot;/home/thomas/logs/thomas&quot;</span>
+
+<span class="n">configure</span> <span class="k">do</span>
+  <span class="n">set</span> <span class="ss">:port</span><span class="p">,</span> <span class="mi">9999</span>
+  <span class="n">set</span> <span class="ss">:bind</span><span class="p">,</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+<span class="k">end</span>
+
+<span class="n">post</span> <span class="s1">&#39;/&#39;</span> <span class="k">do</span>
+  <span class="n">current_dir</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">)</span>
+  <span class="n">log_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="vg">$logs_dir</span><span class="si">}</span><span class="s2">/</span><span class="si">#{</span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">iso8601</span><span class="si">}</span><span class="s2">&quot;</span>
+
+  <span class="sx">%x(cd </span><span class="si">#{</span><span class="n">current_dir</span><span class="si">}</span><span class="sx"> &amp;&amp; git pull origin master)</span>
+  <span class="sx">%x(cd </span><span class="si">#{</span><span class="n">current_dir</span><span class="si">}</span><span class="sx"> &amp;&amp; nanoc compile &gt; </span><span class="si">#{</span><span class="n">log_file</span><span class="si">}</span><span class="sx">)</span>
+  <span class="sx">%x(rm -R </span><span class="si">#{</span><span class="vg">$output_dir</span><span class="si">}</span><span class="sx">/* 2&gt;&gt; </span><span class="si">#{</span><span class="n">log_file</span><span class="si">}</span><span class="sx">)</span>
+  <span class="sx">%x(cd </span><span class="si">#{</span><span class="n">current_dir</span><span class="si">}</span><span class="sx"> &amp;&amp; mv </span><span class="si">#{</span><span class="n">current_dir</span><span class="si">}</span><span class="sx">/output/* </span><span class="si">#{</span><span class="vg">$output_dir</span><span class="si">}</span><span class="sx">/ 2&gt;&gt; </span><span class="si">#{</span><span class="n">log_file</span><span class="si">}</span><span class="sx">)</span>
+<span class="k">end</span>
+</pre>
+</div>
+
+<p>Pretty simple, uh? The rest of the work is done by <a href="http://nginx.org/">Nginx</a>:</p>
+<div class="highlight"><pre><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">server_name</span> <span class="s">thomas.pelletier.im</span><span class="p">;</span>
+
+    <span class="c1"># Compression stuff</span>
+
+    <span class="kn">location</span> <span class="s">/hook</span> <span class="p">{</span>
+        <span class="kn">allow</span> <span class="mi">207</span><span class="s">.97.227.253</span><span class="p">;</span> <span class="c1"># Only allow the two GitHub</span>
+        <span class="kn">allow</span> <span class="mi">50</span><span class="s">.57.128.197</span><span class="p">;</span>  <span class="c1"># IPs.</span>
+        <span class="kn">deny</span> <span class="s">all</span><span class="p">;</span>
+
+        <span class="kn">rewrite</span> <span class="s">.*</span> <span class="s">/</span> <span class="s">break</span><span class="p">;</span>
+        <span class="kn">proxy_pass</span> <span class="s">http://127.0.0.1:9999</span><span class="p">;</span>
+        <span class="kn">proxy_set_header</span>  <span class="s">X-Real-IP</span>  <span class="nv">$remote_addr</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kn">location</span> <span class="s">/</span> <span class="p">{</span>
+        <span class="kn">root</span> <span class="s">/var/www/thomas</span><span class="p">;</span>
+        <span class="kn">index</span> <span class="s">index.html</span> <span class="s">index.htm</span><span class="p">;</span>
+
+        <span class="c1"># Some rewrite and cache stuff.</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+<p>Now I can quickly fix something. The drawback is that your need a server, not
+just a simple FTP static host. I would like to try this using only GitHub Pages
+and Heroku, but I use YUI compressor, which requires Java, and I&#39;m not sure
+that we can use both Java and Ruby on the same Heroku instance. To be
+investigated.</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

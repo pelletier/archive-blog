@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Thomas Pelletier</title>
+ <subtitle>Django-related posts</subtitle>
+ <link href="http://thomas.pelletier.im/feeds/django.xml" rel="self"/>
+ <link href="http://thomas.pelletier.im/"/>
+ <updated>2013-09-26T10:14:48Z</updated>
+ <id>http://thomas.pelletier.im/feeds/django</id>
+ <author>
+   <name>Thomas Pelletier</name>
+   <email>thomas@pelletier.im</email>
+ </author>
+
+    
+        
+    
+        
+    
+        
+    
+        
+            <entry>
+                <title>Mixing Django Forms</title>
+                <link href="http://thomas.pelletier.im/2011/09/mixing-django-forms" />
+                <updated>2011-09-02T23:00:00Z</updated>
+                <id>http://thomas.pelletier.im/2011/09/mixing-django-forms</id>
+                <content type="html">&lt;p&gt;So you ever wanted to mix a simple Django form (subclass of
+&lt;code&gt;django.forms.Form&lt;/code&gt;) and a model form (subclass of &lt;code&gt;django.forms.ModelForm&lt;/code&gt;)?&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;#the-result&quot;&gt;TL;DR&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;some-background&quot;&gt;Some background &lt;a href=&quot;#some-background&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I was coding a website which has an email-based authentication backend (for the
+record it is based on
+&lt;a href=&quot;http://www.micahcarrick.com/django-email-authentication.html&quot;&gt;this snippet&lt;/a&gt;).
+Such a design decision implies that you have to take care of multiple things,
+and among them the forms. Django authentication system
+&lt;a href=&quot;https://code.djangoproject.com/browser/django/trunk/django/contrib/auth/forms.py&quot;&gt;provides&lt;/a&gt;
+multiple default forms for login, password editing and so on. They perfectly fit
+the default situation (basic user name and password authentication), but they
+have to be tweak in any other case. However I didn&amp;#39;t wanted to rewrite my forms
+from scratch, so obviously after a quite intense inheriting session, I found
+myself having some highly refactorable code, mainly because I always needed to
+add an &lt;code&gt;email&lt;/code&gt; form field. My first idea was to create a simple &lt;code&gt;object&lt;/code&gt;
+subclass which just contains the field and its validation method, and make all
+my forms inheriting from this proxy class (definitely not sure it&amp;#39;s a good name
+for it, suggestions?). I knew that Django forms are more complicated than that
+in their way to &amp;quot;discover&amp;quot; fields, yet I tried. Yeah, it didn&amp;#39;t work. Next idea:
+if would be logical that we can inherit forms, and even merge them using
+multiple inheritance. So I adjusted my code and made my &amp;quot;proxy&amp;quot; class inherit
+from &lt;code&gt;django.forms.Form&lt;/code&gt;. Well, it almost worked: things went well when a &lt;code&gt;Form&lt;/code&gt;
+inherited from the proxy class, but went wrong whenever a &lt;code&gt;ModelForm&lt;/code&gt; was
+involved. Obviously, in the documentation lie Truth and Wisdom:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;For technical reasons, a subclass cannot inherit from both a ModelForm and
+a Form simultaneously.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#form-inheritance&quot;&gt;Django documentation, ModelForms, Form inheritance&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The &amp;quot;for technical reasons&amp;quot; excuse reminds me the &amp;quot;we can&amp;#39;t because of security&amp;quot;
+which unskilled sysadmins tell you when they are incapable of doing something
+you politely asked them. So my first – horribly harmful – reflex was to search
+the Internet for a solution. I quickly found
+&lt;a href=&quot;http://www.slideshare.net/kingkilr/forms-getting-your-moneys-worth&quot;&gt;Alex Gaynor&amp;#39;s talk&lt;/a&gt;
+about combining Django forms. Nice solution. But 1) I&amp;#39;m too lazy for
+reimplementing the form API and 2) I don&amp;#39;t very like the code style this code
+involves, unless I&amp;#39;m missing something:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c&quot;&gt;# From the slides&#8230;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ModelForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Meta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ProfileForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ModelForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Meta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserProfile&lt;/span&gt;
+
+
+&lt;span class=&quot;n&quot;&gt;UserProfile&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;multipleform_factory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&amp;#39;profile&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProfileForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;profile&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# And now I want to tweak the save() method&#8230;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;user_profile_save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;UserProfile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_profile_save&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So I dived in the source code of Django, created a
+&lt;a href=&quot;https://bitbucket.org/pelletier/django-hack/&quot;&gt;patch queue on Bitbucket&lt;/a&gt; and
+I was ready to hack.&lt;/p&gt;
+&lt;h2 id=&quot;the-result&quot;&gt;The result &lt;a href=&quot;#the-result&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;(I removed the tests. You can get
+&lt;a href=&quot;https://bitbucket.org/pelletier/django-hack/src/4758a005e648/modelform_metaclass.patch&quot;&gt;the full patch on bitbucket&lt;/a&gt;)&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;# HG changeset patch
+# Parent f4f68695f8e007ef70b438c5cf653bc43cd7f2ca
+
+&lt;span class=&quot;gh&quot;&gt;diff -r f4f68695f8e0 django/forms/models.py&lt;/span&gt;
+&lt;span class=&quot;gd&quot;&gt;&#8212; a/django/forms/models.py    Fri Sep 02 03:47:49 2011 +0000&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+++ b/django/forms/models.py    Sat Sep 03 18:18:14 2011 +0200&lt;/span&gt;
+&lt;span class=&quot;gu&quot;&gt;@@ -12,7 +12,7 @@&lt;/span&gt;
+ from django.utils.translation import ugettext_lazy as _, ugettext
+
+ from util import ErrorList
+&lt;span class=&quot;gd&quot;&gt;-from forms import BaseForm, get_declared_fields&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+from forms import BaseForm, get_declared_fields, Form, DeclarativeFieldsMetaclass&lt;/span&gt;
+ from fields import Field, ChoiceField
+ from widgets import SelectMultiple, HiddenInput, MultipleHiddenInput
+ from widgets import media_property
+&lt;span class=&quot;gu&quot;&gt;@@ -181,8 +181,7 @@&lt;/span&gt;
+         self.exclude = getattr(options, &amp;#39;exclude&amp;#39;, None)
+         self.widgets = getattr(options, &amp;#39;widgets&amp;#39;, None)
+
+&lt;span class=&quot;gd&quot;&gt;-&lt;/span&gt;
+&lt;span class=&quot;gd&quot;&gt;-class ModelFormMetaclass(type):&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+class ModelFormMetaclass(DeclarativeFieldsMetaclass):&lt;/span&gt;
+     def __new__(cls, name, bases, attrs):
+         formfield_callback = attrs.pop(&amp;#39;formfield_callback&amp;#39;, None)
+         try:
+&lt;span class=&quot;gu&quot;&gt;@@ -191,6 +190,10 @@&lt;/span&gt;
+             # We are defining ModelForm itself.
+             parents = None
+         declared_fields = get_declared_fields(bases, attrs, False)
+&lt;span class=&quot;gi&quot;&gt;+&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+        simple_bases = [b for b in bases if issubclass(b, Form)]&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+        declared_fields.update(get_declared_fields(simple_bases, attrs))&lt;/span&gt;
+&lt;span class=&quot;gi&quot;&gt;+&lt;/span&gt;
+         new_class = super(ModelFormMetaclass, cls).__new__(cls, name, bases,
+                 attrs)
+         if not parents:
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;So now I can do things like this:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib.auth.models&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib.auth&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authenticate&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.contrib.auth.forms&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UserCreationForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AuthenticationForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PasswordChangeForm&lt;/span&gt;
+
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ProxyWithEmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Form&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot;Proxy form to add the email field to the form (with validation).&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EmailField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;Email address&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max_length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;75&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                             &lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;clean_email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;hasattr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;raise&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValidationError&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;This email address already exists. Did you forget your password?&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DoesNotExist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RegisterForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UserCreationForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProxyWithEmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot;Require email address when a user registers.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Meta&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;username&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;email&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,)&lt;/span&gt; 
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UserCreationForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;password1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;email&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_active&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;password1&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EditAccountForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PasswordChangeForm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProxyWithEmail&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;new_password1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;New password&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                    &lt;span class=&quot;n&quot;&gt;widget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PasswordInput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                    &lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;new_password2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;label&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;New password confirmation&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                    &lt;span class=&quot;n&quot;&gt;widget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PasswordInput&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+                                    &lt;span class=&quot;n&quot;&gt;required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;email&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;new_password1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cleaned_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;new_password1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Nice isn&amp;#39;t it?&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion &lt;a href=&quot;#conclusion&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;I know, hacking the framework for such a thing is definitely &lt;strong&gt;not&lt;/strong&gt; in the good
+practices guide, and my patch is far from just good. However in my opinion there
+is something to do about Django forms, and I hope this patch will be the
+beginning of a reflexion about an improvement plan for Django forms.&lt;/p&gt;
+
+&lt;p&gt;Any comment, tip, idea, constructive criticism and hatred letters are highly
+appreciated!&lt;/p&gt;
+</content>
+            </entry>
+        
+    
+        
+    
+        
+            <entry>
+                <title>Git-based Django deployment</title>
+                <link href="http://thomas.pelletier.im/2011/04/git-django-deployment" />
+                <updated>2011-04-12T23:00:00Z</updated>
+                <id>http://thomas.pelletier.im/2011/04/git-django-deployment</id>
+                <content type="html">&lt;p&gt;If you ever used &lt;a href=&quot;http://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt; (or any similar service), you
+may be jealous of their straightforward way to deploy new versions of
+applications. At least, I am.&lt;/p&gt;
+
+&lt;p&gt;That&amp;#39;s why I came up with a couple of hacks to mimic their
+&lt;a href=&quot;http://git-scm.com/&quot;&gt;git&lt;/a&gt;-based deployment workflow, but for my own
+&lt;a href=&quot;http://www.djangoproject.com/&quot;&gt;Django&lt;/a&gt; applications, served by
+&lt;a href=&quot;http://gunicorn.org/&quot;&gt;Gunicorn&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The basic idea is: your application code is contained in a Git repository, and
+your production deployments are as simple as a &lt;code&gt;git push&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: because we will type commands on both the client and server side,
+server-side commands will start by a &lt;code&gt;&amp;gt;&lt;/code&gt; and client-side commands by a &lt;code&gt;$&lt;/code&gt;. All
+commands are executed by a regular user.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&quot;table-of-contents&quot;&gt;Table of contents &lt;a href=&quot;#table-of-contents&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;div class=&quot;toc&quot;&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;#prepare-your-server&quot;&gt;Prepare your server&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#create-your-simple-django-application&quot;&gt;Create your simple Django application&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;#the-deployment-script&quot;&gt;The deployment script&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#tweak-your-production-git-repository&quot;&gt;Tweak your production git repository&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#unleash-the-green-unicorn&quot;&gt;Unleash the green unicorn&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#add-your-changes-to-the-production-repository&quot;&gt;Add your changes to the production repository&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=&quot;#go-further&quot;&gt;Go further&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/p&gt;
+&lt;h2 id=&quot;prepare-your-server&quot;&gt;Prepare your server &lt;a href=&quot;#prepare-your-server&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;First of all, let&amp;#39;s prepare the ground by installing all the software we need
+on our production server (for the record, I used
+a &lt;a href=&quot;http://www.ubuntu.com/&quot;&gt;Lucid&lt;/a&gt; &lt;a href=&quot;http://vagrantup.com/&quot;&gt;Vagrant box&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&amp;gt; sudo apt-get install git-core
+&amp;gt; sudo apt-get install python-virtualenv
+&amp;gt; sudo apt-get install nginx
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now that we have the software, let&amp;#39;s create the base structure for our
+production website. In my configuration, I&amp;#39;m in my home, which is
+&lt;code&gt;/home/vagrant/&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&amp;gt; mkdir www
+&amp;gt; &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;www
+&amp;gt; virtualenv &#8211;no-site-package .
+&amp;gt; mkdir var
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code&gt;var&lt;/code&gt; directory will contain the pidfile and the gunicorn socket file. You
+could also use it to store a &lt;a href=&quot;http://www.sqlite.org/&quot;&gt;sqlite database&lt;/a&gt; if you
+are running a test server for example.&lt;/p&gt;
+&lt;h2 id=&quot;create-your-simple-django-application&quot;&gt;Create your simple Django application &lt;a href=&quot;#create-your-simple-django-application&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Switch to your desktop shell and create a basic Django application (I call it
+&lt;code&gt;codebase&lt;/code&gt;) along with a git repository:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;django-admin.py startproject codebase
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;codebase
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git init .
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We also add the Pip requirements file (because you use
+&lt;a href=&quot;http://www.pip-installer.org/&quot;&gt;Pip&lt;/a&gt; to manage your module dependencies
+right?): &lt;code&gt;$ echo &amp;quot;django\ngunicorn&amp;quot; &amp;gt; requirements.pip&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;the-deployment-script&quot;&gt;The deployment script &lt;a href=&quot;#the-deployment-script&quot;&gt;»&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Now we have to create a simple bash script which will be executed right after
+you push your new code to the server. I put it in the root of the project tree
+because I think it&amp;#39;s a good thing to versionize it with git. So open your
+favorite text editor and write the &lt;code&gt;deploy.sh&lt;/code&gt; script:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Remember that this script will be executed by the unix user who push to the&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# git repository ; and the script will be executed in ~/www/codebase/.&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Update requirements&lt;/span&gt;
+../bin/pip install -r requirements.pip
+
+&lt;span class=&quot;c&quot;&gt;# Reload the Gunicorn instance&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;kill&lt;/span&gt; -HUP &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;cat ../var/pid&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Ideas of other things to do:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   Apply South migrations?&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#   Clear cache?&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Now we add a first commit to our local repository:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git add .
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git commit -a -m &lt;span class=&quot;s2&quot;&gt;&amp;quot;bare django project&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&quot;tweak-your-production-git-repository&quot;&gt;Tweak your production git repository &lt;a href=&quot;#tweak-your-production-git-repository&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;First, clone your local repository into the &lt;code&gt;codebase&lt;/code&gt; direcory:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&amp;gt; git clone /vagrant/codebase /home/vagrant/www/codebase
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Note: /vagrant/ is a mount point to my desktop machine.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;In order to make git do the automatic things, we have to tweak its server-side
+configuration. So add the following to the &lt;code&gt;&amp;gt; codebase/.git/config&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;[receive]&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;denyCurrentBranch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;ignore&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It prevents Git from moaning about the fact that you push to a non-bare
+repository.&lt;/p&gt;
+
+&lt;p&gt;We also have to create a &lt;a href=&quot;http://www.kernel.org/pub/software/scm/git/docs/githooks.html&quot;&gt;git
+hook&lt;/a&gt; so as it
+runs the &lt;code&gt;deploy.sh&lt;/code&gt; script we wrote earlier. Write the following in the
+&lt;code&gt;&amp;gt; codebase/.git/hooks/post-receive&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# update the source tree&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ..
+env -i git reset &#8211;hard
+
+&lt;span class=&quot;c&quot;&gt;# execute the deploy.sh script&lt;/span&gt;
+sh deploy.sh
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Don&amp;#39;t forget to &lt;code&gt;&amp;gt; chmod +x codebase/.git/hooks/post-receive&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;unleash-the-green-unicorn&quot;&gt;Unleash the green unicorn &lt;a href=&quot;#unleash-the-green-unicorn&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;In a normal production use, you should run Gunicorn using
+&lt;a href=&quot;http://supervisord.org/&quot;&gt;supervisord&lt;/a&gt; or anything like it. But for this
+example, I will run directly Gunicorn from the command line:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&amp;gt; bin/gunicorn_django &#8211;pid var/pid &#8211;socket var/socket codebase/settings.py
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;h2 id=&quot;add-your-changes-to-the-production-repository&quot;&gt;Add your changes to the production repository &lt;a href=&quot;#add-your-changes-to-the-production-repository&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Now you can easily push your changes to the production site. Just edit some
+files, commit, and &lt;code&gt;git push ssh://yourserver/www/codebase/.git master&lt;/code&gt; and
+you&amp;#39;re done. Requirements will be installed and Gunicorn will be gracefully
+reloaded.&lt;/p&gt;
+&lt;h2 id=&quot;go-further&quot;&gt;Go further &lt;a href=&quot;#go-further&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;The configuration is not done yet: we don&amp;#39;t take care of settings! We obviously
+need to swap development settings with production settings. You can use my
+&lt;a href=&quot;http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django/&quot;&gt;Rails-like configuration for
+Django&lt;/a&gt;
+to do this (it works flawlessly).&lt;/p&gt;
+</content>
+            </entry>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <entry>
+                <title>Rails-like configuration style for Django</title>
+                <link href="http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django" />
+                <updated>2010-08-21T23:00:00Z</updated>
+                <id>http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django</id>
+                <content type="html">&lt;p&gt;Django&amp;#39;s default settings system is not very suitable for multiple
+configuration profiles — development, testing, production and so on: you have
+the settings.py, and that&amp;#39;s it. As far as I&amp;#39;m concerned, my settings are
+sometimes very different between my notebook and for instance my production
+server. First of all, it is obviously out of the question to change the
+settings.py on deployment. Some people append at the end of their &lt;code&gt;settings.py&lt;/code&gt;
+a simple &lt;code&gt;from deploy import *&lt;/code&gt;, surrounded by a &lt;code&gt;try / except ImportError&lt;/code&gt;
+clause. In my opinion this workaround is neither sexy nor flexible. I finally
+decided to use the Rails way to manage configuration in my latest pet project.&lt;/p&gt;
+
+&lt;p&gt;The principle is simple: replace the content of the settings.py by the one
+provided further, create a config/ directory, as if it is an application, and
+in this folder, put the default configuration in &lt;code&gt;__init__.py&lt;/code&gt;, and add a Python
+module per configuration profile. You should come up with something like that:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/posts/tree1.png&quot; alt=&quot;Files tree&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;The default profile is &amp;#39;development&amp;#39; (read the settings.py). If you want to use
+a specific profile, prepend &lt;code&gt;DJANGO_ENV=&amp;quot;theprofile&amp;quot;&lt;/code&gt; to your shell command. It
+must become very long to type this at each command, that&amp;#39;s why I recommend you
+to add this line to the &amp;#39;bin/activate&amp;#39; script of the corresponding
+&lt;a href=&quot;http://pypi.python.org/pypi/virtualenv&quot;&gt;virtualenv&lt;/a&gt;, or in your
+&lt;code&gt;~/.bash_profile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/543975.js&quot;&gt; &lt;/script&gt;
+</content>
+            </entry>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <entry>
+                <title>Gunicorn / Django Debian init script</title>
+                <link href="http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script" />
+                <updated>2010-05-08T23:00:00Z</updated>
+                <id>http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script</id>
+                <content type="html">&lt;p&gt;This is a simple Debian init.d script for my self-hosted Django/Gunicorn
+websites. Note that it runs inside a virtualenv (my installed Django versions
+are different in each virtualenv). If you have questions: comment this post! &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh &lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;### BEGIN INIT INFO&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Provides:       seismic_web&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Required-Start: $local_fs $syslog&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Required-Stop:  $local_fs $syslog&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Default-Start:  2 3 4 5&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Default-Stop:   0 1 6&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Short-Description: Gunicorn processes for seismic_web&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;### END INIT INFO&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# www-data is the default www user on debian&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;USER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;www-data
+&lt;span class=&quot;nv&quot;&gt;NAME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;seismic_web&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;GUNICORN_RUN&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;gunicorn_django&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Confdir: the Django project inside the virtualenv&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;CONFDIR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;/home/thomas/seismic_web/seismic_web&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;VENV_ACTIVATION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;. ../bin/activate&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;RETVAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0
+&lt;span class=&quot;c&quot;&gt;# PID: I always name my gunicorn pidfiles this way&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;PID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;/tmp/gunicorn_&amp;quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$NAME&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;.pid&amp;quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# source function library&lt;/span&gt;
+. /lib/lsb/init-functions
+
+
+start&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Starting $NAME.&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CONFDIR&lt;/span&gt;;
+    su -c &lt;span class=&quot;s2&quot;&gt;&amp;quot;$VENV_ACTIVATION; $GUNICORN_RUN&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$USER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;OK&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;failed&amp;quot;&lt;/span&gt;;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+stop&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Stopping $NAME&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;kill&lt;/span&gt; -QUIT &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;cat &lt;span class=&quot;nv&quot;&gt;$PID&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;OK&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;failed&amp;quot;&lt;/span&gt;;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+reload&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Reloading $NAME:&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; -f &lt;span class=&quot;nv&quot;&gt;$PID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;then &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;kill&lt;/span&gt; -HUP &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;cat &lt;span class=&quot;nv&quot;&gt;$PID&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;OK&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;failed&amp;quot;&lt;/span&gt;;
+    &lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$1&amp;quot;&lt;/span&gt; in
+    start&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        start
+        ;;
+    stop&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        stop
+        ;;
+    restart&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        reload
+        ;;
+    reload&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        reload
+        ;;
+    force-reload&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        stop &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; start
+        ;;
+    *&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;$&amp;quot;Usage: $0 {start|stop|restart}&amp;quot;&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;RETVAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
+&lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$RETVAL&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+</content>
+            </entry>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <entry>
+                <title>Test your django-piston API (with auth)</title>
+                <link href="http://thomas.pelletier.im/2009/12/test-your-django-piston-api-with-auth" />
+                <updated>2009-12-17T00:00:00Z</updated>
+                <id>http://thomas.pelletier.im/2009/12/test-your-django-piston-api-with-auth</id>
+                <content type="html">&lt;p&gt;I have to build the API for one of my web service. It is Django and
+django-piston powered application and it works well. Okay. I chose the &lt;a href=&quot;http://en.wikipedia.org/wiki/Test_Driven_Development&quot;&gt;TDD
+technique&lt;/a&gt;.  So my
+problem was: how do I test the API parts which need authentication (basic HTTP,
+not OAuth for now)? The built-in test client of Django doesn&amp;#39;t seem to have
+such a feature.&lt;/p&gt;
+
+&lt;p&gt;So, here is my small workaround: you have to generate the &lt;code&gt;HTTP_AUTHORIZATION&lt;/code&gt;
+field of your HTTP request. I wrote a small base test class for tests which
+need authentication:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;base64&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;unittest&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.test.client&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Client&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BaseAuthenticatedClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unittest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestCase&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setUp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Client&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;username&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;Basic &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%s&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;base64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encodestring&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extra&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&amp;#39;HTTP_AUTHORIZATION&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;auth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;You just have to replace &lt;em&gt;username&lt;/em&gt; and &lt;em&gt;password&lt;/em&gt;, and write your own test suite:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestAPIAuth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BaseAuthenticatedClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testrootauth&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;client&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;/api/aresource/id&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{},&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extra&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;assertEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status_code&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;It should be OK. Have fun!&lt;/p&gt;
+</content>
+            </entry>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+</feed>

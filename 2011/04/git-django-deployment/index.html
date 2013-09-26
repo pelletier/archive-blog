@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Git-based Django deployment</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Git-based Django deployment <a href="/2011/04/git-django-deployment/">»</a></h1>
+        </div>
+        <p class="date">Published on April 13, 2011.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>If you ever used <a href="http://www.heroku.com/">Heroku</a> (or any similar service), you
+may be jealous of their straightforward way to deploy new versions of
+applications. At least, I am.</p>
+
+<p>That&#39;s why I came up with a couple of hacks to mimic their
+<a href="http://git-scm.com/">git</a>-based deployment workflow, but for my own
+<a href="http://www.djangoproject.com/">Django</a> applications, served by
+<a href="http://gunicorn.org/">Gunicorn</a>.</p>
+
+<p>The basic idea is: your application code is contained in a Git repository, and
+your production deployments are as simple as a <code>git push</code>.</p>
+
+<p><em>Note: because we will type commands on both the client and server side,
+server-side commands will start by a <code>&gt;</code> and client-side commands by a <code>$</code>. All
+commands are executed by a regular user.</em></p>
+<h2 id="table-of-contents">Table of contents <a href="#table-of-contents">»</a></h2>
+<p><div class="toc"><ul><li><a href="#prepare-your-server">Prepare your server</a></li><li><a href="#create-your-simple-django-application">Create your simple Django application</a></li><li><ul><li><a href="#the-deployment-script">The deployment script</a></li></ul></li><li><a href="#tweak-your-production-git-repository">Tweak your production git repository</a></li><li><a href="#unleash-the-green-unicorn">Unleash the green unicorn</a></li><li><a href="#add-your-changes-to-the-production-repository">Add your changes to the production repository</a></li><li><a href="#go-further">Go further</a></li></ul></li></ul></div></p>
+<h2 id="prepare-your-server">Prepare your server <a href="#prepare-your-server">»</a></h2>
+<p>First of all, let&#39;s prepare the ground by installing all the software we need
+on our production server (for the record, I used
+a <a href="http://www.ubuntu.com/">Lucid</a> <a href="http://vagrantup.com/">Vagrant box</a>):</p>
+<div class="highlight"><pre>&gt; sudo apt-get install git-core
+&gt; sudo apt-get install python-virtualenv
+&gt; sudo apt-get install nginx
+</pre>
+</div>
+
+<p>Now that we have the software, let&#39;s create the base structure for our
+production website. In my configuration, I&#39;m in my home, which is
+<code>/home/vagrant/</code>.</p>
+<div class="highlight"><pre>&gt; mkdir www
+&gt; <span class="nb">cd </span>www
+&gt; virtualenv --no-site-package .
+&gt; mkdir var
+</pre>
+</div>
+
+<p>The <code>var</code> directory will contain the pidfile and the gunicorn socket file. You
+could also use it to store a <a href="http://www.sqlite.org/">sqlite database</a> if you
+are running a test server for example.</p>
+<h2 id="create-your-simple-django-application">Create your simple Django application <a href="#create-your-simple-django-application">»</a></h2>
+<p>Switch to your desktop shell and create a basic Django application (I call it
+<code>codebase</code>) along with a git repository:</p>
+<div class="highlight"><pre><span class="nv">$ </span>django-admin.py startproject codebase
+<span class="nv">$ </span><span class="nb">cd </span>codebase
+<span class="nv">$ </span>git init .
+</pre>
+</div>
+
+<p>We also add the Pip requirements file (because you use
+<a href="http://www.pip-installer.org/">Pip</a> to manage your module dependencies
+right?): <code>$ echo &quot;django\ngunicorn&quot; &gt; requirements.pip</code>.</p>
+<h3 id="the-deployment-script">The deployment script <a href="#the-deployment-script">»</a></h3>
+<p>Now we have to create a simple bash script which will be executed right after
+you push your new code to the server. I put it in the root of the project tree
+because I think it&#39;s a good thing to versionize it with git. So open your
+favorite text editor and write the <code>deploy.sh</code> script:</p>
+<div class="highlight"><pre><span class="c">#!/bin/sh</span>
+
+<span class="c"># Remember that this script will be executed by the unix user who push to the</span>
+<span class="c"># git repository ; and the script will be executed in ~/www/codebase/.</span>
+
+<span class="c"># Update requirements</span>
+../bin/pip install -r requirements.pip
+
+<span class="c"># Reload the Gunicorn instance</span>
+<span class="nb">kill</span> -HUP <span class="sb">`</span>cat ../var/pid<span class="sb">`</span>
+
+<span class="c"># Ideas of other things to do:</span>
+<span class="c">#   Apply South migrations?</span>
+<span class="c">#   Clear cache?</span>
+</pre>
+</div>
+
+<p>Now we add a first commit to our local repository:</p>
+<div class="highlight"><pre><span class="nv">$ </span>git add .
+<span class="nv">$ </span>git commit -a -m <span class="s2">&quot;bare django project&quot;</span>
+</pre>
+</div>
+<h2 id="tweak-your-production-git-repository">Tweak your production git repository <a href="#tweak-your-production-git-repository">»</a></h2>
+<p>First, clone your local repository into the <code>codebase</code> direcory:</p>
+<div class="highlight"><pre>&gt; git clone /vagrant/codebase /home/vagrant/www/codebase
+</pre>
+</div>
+
+<p><em>Note: /vagrant/ is a mount point to my desktop machine.</em></p>
+
+<p>In order to make git do the automatic things, we have to tweak its server-side
+configuration. So add the following to the <code>&gt; codebase/.git/config</code> file:</p>
+<div class="highlight"><pre><span class="k">[receive]</span>
+    <span class="na">denyCurrentBranch</span> <span class="o">=</span> <span class="s">&quot;ignore&quot;</span>
+</pre>
+</div>
+
+<p>It prevents Git from moaning about the fact that you push to a non-bare
+repository.</p>
+
+<p>We also have to create a <a href="http://www.kernel.org/pub/software/scm/git/docs/githooks.html">git
+hook</a> so as it
+runs the <code>deploy.sh</code> script we wrote earlier. Write the following in the
+<code>&gt; codebase/.git/hooks/post-receive</code>:</p>
+<div class="highlight"><pre><span class="c">#!/bin/sh</span>
+
+<span class="c"># update the source tree</span>
+<span class="nb">cd</span> ..
+env -i git reset --hard
+
+<span class="c"># execute the deploy.sh script</span>
+sh deploy.sh
+</pre>
+</div>
+
+<p>Don&#39;t forget to <code>&gt; chmod +x codebase/.git/hooks/post-receive</code>.</p>
+<h2 id="unleash-the-green-unicorn">Unleash the green unicorn <a href="#unleash-the-green-unicorn">»</a></h2>
+<p>In a normal production use, you should run Gunicorn using
+<a href="http://supervisord.org/">supervisord</a> or anything like it. But for this
+example, I will run directly Gunicorn from the command line:</p>
+<div class="highlight"><pre>&gt; bin/gunicorn_django --pid var/pid --socket var/socket codebase/settings.py
+</pre>
+</div>
+<h2 id="add-your-changes-to-the-production-repository">Add your changes to the production repository <a href="#add-your-changes-to-the-production-repository">»</a></h2>
+<p>Now you can easily push your changes to the production site. Just edit some
+files, commit, and <code>git push ssh://yourserver/www/codebase/.git master</code> and
+you&#39;re done. Requirements will be installed and Gunicorn will be gracefully
+reloaded.</p>
+<h2 id="go-further">Go further <a href="#go-further">»</a></h2>
+<p>The configuration is not done yet: we don&#39;t take care of settings! We obviously
+need to swap development settings with production settings. You can use my
+<a href="http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django/">Rails-like configuration for
+Django</a>
+to do this (it works flawlessly).</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

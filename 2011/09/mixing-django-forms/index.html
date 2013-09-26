@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Mixing Django Forms</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Mixing Django Forms <a href="/2011/09/mixing-django-forms/">»</a></h1>
+        </div>
+        <p class="date">Published on September 03, 2011.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>So you ever wanted to mix a simple Django form (subclass of
+<code>django.forms.Form</code>) and a model form (subclass of <code>django.forms.ModelForm</code>)?</p>
+
+<p><a href="#the-result">TL;DR</a>.</p>
+<h2 id="some-background">Some background <a href="#some-background">»</a></h2>
+<p>I was coding a website which has an email-based authentication backend (for the
+record it is based on
+<a href="http://www.micahcarrick.com/django-email-authentication.html">this snippet</a>).
+Such a design decision implies that you have to take care of multiple things,
+and among them the forms. Django authentication system
+<a href="https://code.djangoproject.com/browser/django/trunk/django/contrib/auth/forms.py">provides</a>
+multiple default forms for login, password editing and so on. They perfectly fit
+the default situation (basic user name and password authentication), but they
+have to be tweak in any other case. However I didn&#39;t wanted to rewrite my forms
+from scratch, so obviously after a quite intense inheriting session, I found
+myself having some highly refactorable code, mainly because I always needed to
+add an <code>email</code> form field. My first idea was to create a simple <code>object</code>
+subclass which just contains the field and its validation method, and make all
+my forms inheriting from this proxy class (definitely not sure it&#39;s a good name
+for it, suggestions?). I knew that Django forms are more complicated than that
+in their way to &quot;discover&quot; fields, yet I tried. Yeah, it didn&#39;t work. Next idea:
+if would be logical that we can inherit forms, and even merge them using
+multiple inheritance. So I adjusted my code and made my &quot;proxy&quot; class inherit
+from <code>django.forms.Form</code>. Well, it almost worked: things went well when a <code>Form</code>
+inherited from the proxy class, but went wrong whenever a <code>ModelForm</code> was
+involved. Obviously, in the documentation lie Truth and Wisdom:</p>
+
+<blockquote>
+<p>For technical reasons, a subclass cannot inherit from both a ModelForm and
+a Form simultaneously.</p>
+
+<p><a href="https://docs.djangoproject.com/en/dev/topics/forms/modelforms/#form-inheritance">Django documentation, ModelForms, Form inheritance</a></p>
+</blockquote>
+
+<p>The &quot;for technical reasons&quot; excuse reminds me the &quot;we can&#39;t because of security&quot;
+which unskilled sysadmins tell you when they are incapable of doing something
+you politely asked them. So my first – horribly harmful – reflex was to search
+the Internet for a solution. I quickly found
+<a href="http://www.slideshare.net/kingkilr/forms-getting-your-moneys-worth">Alex Gaynor&#39;s talk</a>
+about combining Django forms. Nice solution. But 1) I&#39;m too lazy for
+reimplementing the form API and 2) I don&#39;t very like the code style this code
+involves, unless I&#39;m missing something:</p>
+<div class="highlight"><pre><span class="c"># From the slides...</span>
+<span class="k">class</span> <span class="nc">UserForm</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">ProfileForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">UserProfile</span>
+
+
+<span class="n">UserProfile</span> <span class="o">=</span> <span class="n">multipleform_factory</span><span class="p">({</span>
+    <span class="s">&#39;user&#39;</span><span class="p">:</span> <span class="n">UserForm</span><span class="p">,</span>
+    <span class="s">&#39;profile&#39;</span><span class="p">:</span> <span class="n">ProfileForm</span><span class="p">,</span>
+<span class="p">},</span> <span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;profile&#39;</span><span class="p">])</span>
+
+<span class="c"># And now I want to tweak the save() method...</span>
+
+<span class="k">def</span> <span class="nf">user_profile_save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">pass</span>
+
+<span class="n">UserProfile</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="n">user_profile_save</span>
+</pre>
+</div>
+
+<p>So I dived in the source code of Django, created a
+<a href="https://bitbucket.org/pelletier/django-hack/">patch queue on Bitbucket</a> and
+I was ready to hack.</p>
+<h2 id="the-result">The result <a href="#the-result">»</a></h2>
+<p>(I removed the tests. You can get
+<a href="https://bitbucket.org/pelletier/django-hack/src/4758a005e648/modelform_metaclass.patch">the full patch on bitbucket</a>)</p>
+<div class="highlight"><pre># HG changeset patch
+# Parent f4f68695f8e007ef70b438c5cf653bc43cd7f2ca
+
+<span class="gh">diff -r f4f68695f8e0 django/forms/models.py</span>
+<span class="gd">--- a/django/forms/models.py    Fri Sep 02 03:47:49 2011 +0000</span>
+<span class="gi">+++ b/django/forms/models.py    Sat Sep 03 18:18:14 2011 +0200</span>
+<span class="gu">@@ -12,7 +12,7 @@</span>
+ from django.utils.translation import ugettext_lazy as _, ugettext
+
+ from util import ErrorList
+<span class="gd">-from forms import BaseForm, get_declared_fields</span>
+<span class="gi">+from forms import BaseForm, get_declared_fields, Form, DeclarativeFieldsMetaclass</span>
+ from fields import Field, ChoiceField
+ from widgets import SelectMultiple, HiddenInput, MultipleHiddenInput
+ from widgets import media_property
+<span class="gu">@@ -181,8 +181,7 @@</span>
+         self.exclude = getattr(options, &#39;exclude&#39;, None)
+         self.widgets = getattr(options, &#39;widgets&#39;, None)
+
+<span class="gd">-</span>
+<span class="gd">-class ModelFormMetaclass(type):</span>
+<span class="gi">+class ModelFormMetaclass(DeclarativeFieldsMetaclass):</span>
+     def __new__(cls, name, bases, attrs):
+         formfield_callback = attrs.pop(&#39;formfield_callback&#39;, None)
+         try:
+<span class="gu">@@ -191,6 +190,10 @@</span>
+             # We are defining ModelForm itself.
+             parents = None
+         declared_fields = get_declared_fields(bases, attrs, False)
+<span class="gi">+</span>
+<span class="gi">+        simple_bases = [b for b in bases if issubclass(b, Form)]</span>
+<span class="gi">+        declared_fields.update(get_declared_fields(simple_bases, attrs))</span>
+<span class="gi">+</span>
+         new_class = super(ModelFormMetaclass, cls).__new__(cls, name, bases,
+                 attrs)
+         if not parents:
+</pre>
+</div>
+
+<p>So now I can do things like this:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">authenticate</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.forms</span> <span class="kn">import</span> <span class="n">UserCreationForm</span><span class="p">,</span> <span class="n">AuthenticationForm</span><span class="p">,</span> <span class="n">PasswordChangeForm</span>
+
+
+
+<span class="k">class</span> <span class="nc">ProxyWithEmail</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Proxy form to add the email field to the form (with validation).&quot;&quot;&quot;</span>
+
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&#39;Email address&#39;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span>
+                             <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clean_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="n">email</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">email</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">&quot;This email address already exists. Did you forget your password?&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">User</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">email</span>
+
+
+<span class="k">class</span> <span class="nc">RegisterForm</span><span class="p">(</span><span class="n">UserCreationForm</span><span class="p">,</span> <span class="n">ProxyWithEmail</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Require email address when a user registers.&quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="s">&#39;email&#39;</span><span class="p">,)</span> 
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserCreationForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&quot;password1&quot;</span><span class="p">])</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&quot;email&quot;</span><span class="p">]</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">,</span>
+                                <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&quot;password1&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">user</span>
+
+
+<span class="k">class</span> <span class="nc">EditAccountForm</span><span class="p">(</span><span class="n">PasswordChangeForm</span><span class="p">,</span> <span class="n">ProxyWithEmail</span><span class="p">):</span>
+    <span class="n">new_password1</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;New password&quot;</span><span class="p">,</span>
+                                    <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">,</span>
+                                    <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">new_password2</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s">&quot;New password confirmation&quot;</span><span class="p">,</span>
+                                    <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">,</span>
+                                    <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commit</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;new_password1&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">&#39;new_password1&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span>
+</pre>
+</div>
+
+<p>Nice isn&#39;t it?</p>
+<h2 id="conclusion">Conclusion <a href="#conclusion">»</a></h2>
+<p>I know, hacking the framework for such a thing is definitely <strong>not</strong> in the good
+practices guide, and my patch is far from just good. However in my opinion there
+is something to do about Django forms, and I hope this patch will be the
+beginning of a reflexion about an improvement plan for Django forms.</p>
+
+<p>Any comment, tip, idea, constructive criticism and hatred letters are highly
+appreciated!</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

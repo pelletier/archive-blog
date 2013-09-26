@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Dijkstra's algorithm Python implementation</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Dijkstra's algorithm Python implementation <a href="/2010/02/dijkstras-algorithm-python-implementation/">»</a></h1>
+        </div>
+        <p class="date">Published on February 15, 2010.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>Here is my implementation of Dijkstra&#39;s algorithm (also known as the shortest
+path) in Python. I wrote it for a project at school and put it there for memory
+only.</p>
+
+<p>Note:</p>
+
+<ul>
+<li>I don&#39;t test the graph.</li>
+<li>Graph is oriented. If you want a non-oriented graph, you need to add vertices twice in your graph.</li>
+<li>May be improved (time).</li>
+</ul>
+
+<p>Here is the source (<a href="http://friendpaste.com/7ml2pWDYzgr0I0ZOiTU6nq">on Friendpaste</a>):</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">dijkstra</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dijkstra&#39;s algorithm Python implementation.</span>
+
+<span class="sd">    Arguments:</span>
+<span class="sd">        graph: Dictionnary of dictionnary (keys are vertices).</span>
+<span class="sd">        start: Start vertex.</span>
+<span class="sd">        end: End vertex.</span>
+
+<span class="sd">    Output:</span>
+<span class="sd">        List of vertices from the beggining to the end.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; graph = {</span>
+<span class="sd">    ...     &#39;A&#39;: {&#39;B&#39;: 10, &#39;D&#39;: 4, &#39;F&#39;: 10},</span>
+<span class="sd">    ...     &#39;B&#39;: {&#39;E&#39;: 5, &#39;J&#39;: 10, &#39;I&#39;: 17},</span>
+<span class="sd">    ...     &#39;C&#39;: {&#39;A&#39;: 4, &#39;D&#39;: 10, &#39;E&#39;: 16},</span>
+<span class="sd">    ...     &#39;D&#39;: {&#39;F&#39;: 12, &#39;G&#39;: 21},</span>
+<span class="sd">    ...     &#39;E&#39;: {&#39;G&#39;: 4},</span>
+<span class="sd">    ...     &#39;F&#39;: {&#39;H&#39;: 3},</span>
+<span class="sd">    ...     &#39;G&#39;: {&#39;J&#39;: 3},</span>
+<span class="sd">    ...     &#39;H&#39;: {&#39;G&#39;: 3, &#39;J&#39;: 5},</span>
+<span class="sd">    ...     &#39;I&#39;: {},</span>
+<span class="sd">    ...     &#39;J&#39;: {&#39;I&#39;: 8},</span>
+<span class="sd">    ... }    </span>
+<span class="sd">    &gt;&gt;&gt; dijkstra(graph, &#39;C&#39;, &#39;I&#39;)</span>
+<span class="sd">    [&#39;C&#39;, &#39;A&#39;, &#39;B&#39;, &#39;I&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">D</span> <span class="o">=</span> <span class="p">{}</span> <span class="c"># Final distances dict</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="p">{}</span> <span class="c"># Predecessor dict</span>
+
+    <span class="c"># Fill the dicts with default values</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">D</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c"># Vertices are unreachable</span>
+        <span class="n">P</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;&quot;</span> <span class="c"># Vertices have no predecessors</span>
+
+    <span class="n">D</span><span class="p">[</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># The start vertex needs no move</span>
+
+    <span class="n">unseen_nodes</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="c"># All nodes are unseen</span>
+
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">unseen_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c"># Select the node with the lowest value in D (final distance)</span>
+        <span class="n">shortest</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">temp_node</span> <span class="ow">in</span> <span class="n">unseen_nodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">shortest</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">shortest</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">temp_node</span><span class="p">]</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">temp_node</span>
+            <span class="k">elif</span> <span class="n">D</span><span class="p">[</span><span class="n">temp_node</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">shortest</span><span class="p">:</span>
+                <span class="n">shortest</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">temp_node</span><span class="p">]</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">temp_node</span>
+
+        <span class="c"># Remove the selected node from unseen_nodes</span>
+        <span class="n">unseen_nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+
+        <span class="c"># For each child (ie: connected vertex) of the current node</span>
+        <span class="k">for</span> <span class="n">child_node</span><span class="p">,</span> <span class="n">child_value</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">D</span><span class="p">[</span><span class="n">child_node</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">D</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="n">child_value</span><span class="p">:</span>
+                <span class="n">D</span><span class="p">[</span><span class="n">child_node</span><span class="p">]</span> <span class="o">=</span> <span class="n">D</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="n">child_value</span>
+                <span class="c"># To go to child_node, you have to go through node</span>
+                <span class="n">P</span><span class="p">[</span><span class="n">child_node</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span>
+
+    <span class="c"># Set a clean path</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c"># We begin from the end</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">end</span>
+    <span class="c"># While we are not arrived at the beginning</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">start</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span> <span class="c"># Insert the predecessor of the current node</span>
+            <span class="n">node</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="c"># The current node becomes its predecessor</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start</span><span class="p">)</span> <span class="c"># Finally, insert the start vertex</span>
+    <span class="k">return</span> <span class="n">path</span>
+</pre>
+</div>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

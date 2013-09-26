@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | FreeBSD, AFP, Time Machine</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>FreeBSD, AFP, Time Machine <a href="/2012/01/freebsd-afp-timemachine-updated/">»</a></h1>
+        </div>
+        <p class="date">Published on January 21, 2012.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>About two years ago, I wrote <a href="http://thomas.pelletier.im/2010/01/time-machine-freebsd-and-afp-are-on-a-little-boat/">a post</a> about setting up an AFP server to host
+a Time Machine backup on a FreeBSD box. However time passed and Netatalk (the
+software which provide the AFP server) and the AFP specfication evolved, making
+the first article outdated. So here is a brand new version based on the remarks
+<a href="http://www.sax.de/%7Ejoerg/">Jörg Wunsch</a> and the commenters sent me. This configuration has been tester
+on a FreeBSD 8.2 running on VirtualBox, and a Mac OS X 10.7 (Lion) client.</p>
+<h2 id="on-the-freebsd-server">On the FreeBSD server <a href="#on-the-freebsd-server">»</a></h2>
+<p>I assume you have a working FreeBSD installation and the ports tree.</p>
+
+<p>First, let&#39;s start by installing Netatalk (as root):</p>
+<div class="highlight"><pre><span class="nb">cd</span> /usr/ports/net/netatalk/ <span class="o">&amp;&amp;</span> make install clean
+</pre>
+</div>
+
+<p>Now add the following to your <code>/etc/rc.conf</code> file:</p>
+<div class="highlight"><pre><span class="nv">netatalk_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+<span class="nv">afpd_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+<span class="nv">cnid_metad_enable</span><span class="o">=</span><span class="s2">&quot;YES&quot;</span>
+</pre>
+</div>
+
+<p><em>(For those who read the old post: note the new <code>cnid_metad_enable</code> setting)</em></p>
+
+<p>It is time to add a line to <code>/usr/local/etc/AppleVolumes.default</code>. Assuming you
+want to share the folder <code>/home/thomas/tm/</code> as <code>Time machine</code> to the UNIX user
+<code>thomas</code>:</p>
+<div class="highlight"><pre>/home/thomas/tm/ <span class="s2">&quot;Time Machine&quot;</span> allow:thomas cnidscheme:dbd options:usedots,upriv,tm
+</pre>
+</div>
+
+<p><em>(For those who read the old post: note the new options and the <code>cnidscheme</code>
+argument; they are required!)</em></p>
+
+<p>Finally add the following to <code>/usr/local/etc/afpd.conf</code> (making the same
+assumptions as before):</p>
+<div class="highlight"><pre><span class="s2">&quot;Time Machine&quot;</span> -uamlist uams_dhx2_passwd.so
+</pre>
+</div>
+
+<p>You are ready to go!</p>
+<h2 id="on-the-client-side">On the client side <a href="#on-the-client-side">»</a></h2>
+<p><em>(If you&#39;ve read the old version, you may have noticed the &quot;Howl&quot; section
+disappeared. In fact, new versions of Netatalk implement the Apple&#39;s Bonjour
+protocol.)</em></p>
+
+<p>By default, Time Machine only allows you to use an AirPort-based system if you
+want to backup your data throught your network. So we need to ask it politely
+to enable the support for every network drive. Grab your terminal and type:</p>
+<div class="highlight"><pre>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1
+</pre>
+</div>
+
+<p>You also need to create a disk image in order to make Time Machine happy with
+your disk share. Open a terminal, <code>cd</code> to the correct <code>/Volumes/Time\ Machine</code>
+directory and fire</p>
+<div class="highlight"><pre>hdiutil create -size 512g -fs HFS+J -volname <span class="s2">&quot;Time Machine&quot;</span> <span class="sb">`</span>grep -A1 LocalHostName /Library/Preferences/SystemConfiguration/preferences.plist | tail -n1 | awk <span class="s1">&#39;BEGIN { FS = &quot;|&quot; } ; { print $2 }&#39;</span><span class="sb">`</span>_<span class="sb">`</span>ifconfig en0 | grep ether | awk <span class="s1">&#39;BEGIN { FS = &quot;:&quot; } ; {print $1$2$3$4$5$6}&#39;</span> | awk <span class="o">{</span><span class="s1">&#39;print $2&#39;</span><span class="o">}</span><span class="sb">`</span>.sparsebundle
+</pre>
+</div>
+
+<p><em>(Source: <a href="http://www.trollop.org/2011/07/23/os-x-10-7-lion-time-machine-netatalk-2-2/">Steffen L. Norgren</a>)</em></p>
+
+<p>Basically, this command create a 512 GB journaled HFS+ sparsebundle image named
+after your machine name and the MAC address of your <code>en0</code> network interface.</p>
+<h2 id="conclusion">Conclusion <a href="#conclusion">»</a></h2>
+<p>That should be enough – it worked for me. If you think a point needs more
+explanations, or if you can&#39;t make it work, please send me an email: I would be
+more than happy to help to figure out a solution!</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

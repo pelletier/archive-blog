@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Xchat : Votre musique XMMS !</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Xchat : Votre musique XMMS ! <a href="/2008/11/xchat-votre-musique-xmms/">»</a></h1>
+        </div>
+        <p class="date">Published on November 21, 2008.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>Voici un petit script écrit en Perl qui affiche en tant qu&#39;emote (/me) votre
+musique en cours de lecture sur XMMS. Pour l&#39;installer, téléchargez-le (lien
+en bas de la page), placez le dans un répertoire (genre <code>~/.xchat2/</code> chez
+moi), lancez Xchat. Allez dans <strong>Fenêtre -&gt; Greffons et scripts</strong>. Cliquez sur
+<strong>Charger</strong>, puis sélectionnez votre script. C&#39;&#39;est bon =). Pour l&#39;utiliser,
+tapez /kxmms dans le canal où vous souhaitez afficher votre musique. Voici le
+<a href="http://devellinux.free.fr/pub/scripts/xchat2/kxmms.pl">lien de
+téléchargement</a>.</p>
+<div class="highlight"><pre><span class="k">use</span> <span class="n">POSIX</span> <span class="sx">qw(ceil floor)</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">Xmms::</span><span class="n">Remote</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">MP3::</span><span class="n">Tag</span><span class="p">;</span>
+<span class="c1">#------------- XCHAT VARIABLES</span>
+<span class="nv">$script_name</span> <span class="o">=</span> <span class="s">&quot;KXMMS&quot;</span><span class="p">;</span>
+<span class="nv">$script_version</span> <span class="o">=</span> <span class="s">&quot;0.1&quot;</span><span class="p">;</span>
+<span class="nv">$script_creator</span> <span class="o">=</span> <span class="s">&quot;Kizlum&quot;</span><span class="p">;</span>
+<span class="nv">$script_homepage</span> <span class="o">=</span> <span class="s">&quot;http://devellinux.free.fr&quot;</span><span class="p">;</span>
+<span class="nv">$script_command</span> <span class="o">=</span> <span class="s">&quot;kxmms&quot;</span><span class="p">;</span>
+
+<span class="c1">#------------- XCHAT LOAD UP</span>
+<span class="nn">Xchat::</span><span class="n">register</span><span class="p">(</span><span class="nv">$script_name</span><span class="p">,</span> <span class="nv">$script_version</span><span class="p">);</span>
+<span class="nn">Xchat::</span><span class="n">hook_command</span><span class="p">(</span><span class="nv">$script_command</span><span class="p">,</span> <span class="s">&quot;kxmms_handler&quot;</span><span class="p">);</span>
+<span class="nn">Xchat::</span><span class="n">printf</span><span class="p">(</span><span class="nv">$script_name</span> <span class="o">.</span> <span class="s">&quot;v&quot;</span> <span class="o">.</span> <span class="nv">$script_version</span> <span class="o">.</span> <span class="s">&quot; by &quot;</span> <span class="o">.</span> <span class="nv">$script_creator</span> <span class="o">.</span> <span class="s">&quot; successfully loaded. Use /&quot;</span> <span class="o">.</span> <span class="nv">$script_command</span> <span class="o">.</span> <span class="s">&quot;.&quot;</span><span class="p">);</span>
+
+<span class="c1">#------------- FUNCTIONS</span>
+<span class="k">sub </span><span class="nf">get_xmms_tags</span><span class="p">{</span>
+    <span class="nv">$xmms_remote</span> <span class="o">=</span> <span class="nn">Xmms::</span><span class="n">Remote</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">();</span>
+    <span class="nv">$position</span> <span class="o">=</span> <span class="nv">$xmms_remote</span><span class="o">-&gt;</span><span class="n">get_playlist_pos</span><span class="p">;</span>
+    <span class="c1">#On recupere le nom de fichier correspondant</span>
+    <span class="nv">$file_name</span> <span class="o">=</span> <span class="nv">$xmms_remote</span><span class="o">-&gt;</span><span class="n">get_playlist_file</span><span class="p">(</span><span class="nv">$position</span><span class="p">);</span>
+
+    <span class="c1">#On creer un nouveau fichier mp3</span>
+    <span class="nv">$file_mp3</span> <span class="o">=</span> <span class="nn">MP3::</span><span class="n">Tag</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span>
+
+    <span class="c1">#On charge les tags presents dans le fichier MP3</span>
+    <span class="nv">$file_mp3</span><span class="o">-&gt;</span><span class="n">get_tags</span><span class="p">();</span>
+
+   <span class="c1">#Creation d&#39;&#39;un tableau qui va contenir les tags</span>
+   <span class="nv">$tags</span> <span class="o">=</span> <span class="p">{};</span>
+
+   <span class="c1">#Si il existe des infos ID3V1, alors on les exploites</span>
+   <span class="k">if</span><span class="p">(</span><span class="nb">exists</span> <span class="nv">$file_mp3</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">ID3v1</span><span class="p">}){</span>
+        <span class="k">my</span> <span class="nv">$id3v1</span> <span class="o">=</span> <span class="nv">$file_mp3</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">ID3v1</span><span class="p">};</span> <span class="c1">#On recupere les tags dans la variable id3v1</span>
+        <span class="c1">#On remplit la variable $tags avec les infos des tags</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">COMM</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">comment</span><span class="p">();</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TIT2</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">song</span><span class="p">();</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TPE1</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">artist</span><span class="p">();</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TALB</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">album</span><span class="p">();</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TYER</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">year</span><span class="p">();</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TRCK</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">track</span><span class="p">();</span>
+        <span class="nv">$tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TIT1</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$id3v1</span><span class="o">-&gt;</span><span class="n">genre</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nv">$tags</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">sub </span><span class="nf">get_avancement</span><span class="p">{</span>
+    <span class="nv">$xmms_remote</span> <span class="o">=</span> <span class="nn">Xmms::</span><span class="n">Remote</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">();</span>
+    <span class="nv">$position</span> <span class="o">=</span> <span class="nv">$xmms_remote</span><span class="o">-&gt;</span><span class="n">get_playlist_pos</span><span class="p">;</span>
+    <span class="c1">#On recupere le temps et l&#39;&#39;avancement, on met le tout en pourcentages</span>
+    <span class="nv">$current_time</span> <span class="o">=</span> <span class="nv">$xmms_remote</span><span class="o">-&gt;</span><span class="n">get_output_time</span><span class="p">();</span>
+    <span class="nv">$total_time</span> <span class="o">=</span> <span class="nv">$xmms_remote</span><span class="o">-&gt;</span><span class="n">get_playlist_time</span><span class="p">(</span><span class="nv">$position</span><span class="p">);</span>
+    <span class="nv">$avancement_percent</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="nv">$current_time</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="o">/</span><span class="nv">$total_time</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nv">$avancement_percent</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">sub </span><span class="nf">kxmms_handler</span><span class="p">{</span>
+    <span class="c1">#On recupere les tags avec notre fonction</span>
+    <span class="nv">$xmms_tags</span> <span class="o">=</span> <span class="n">get_xmms_tags</span><span class="p">();</span>
+
+    <span class="c1">#On recupere l&#39;avancement</span>
+    <span class="nv">$xmms_avan</span> <span class="o">=</span> <span class="n">get_avancement</span><span class="p">();</span>
+
+    <span class="c1">#On creer la chaine qui va etre ecrite</span>
+    <span class="nv">$output_string</span> <span class="o">=</span> <span class="s">&quot;ecoute [&quot;</span> <span class="o">.</span> <span class="nv">$xmms_tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TIT2</span><span class="p">}</span> <span class="o">.</span> <span class="s">&quot;] interprete par [&quot;</span> <span class="o">.</span> <span class="nv">$xmms_tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TPE1</span><span class="p">}</span> <span class="o">.</span> <span class="s">&quot;] extrait de l&#39;&#39;album [&quot;</span> <span class="o">.</span> <span class="nv">$xmms_tags</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">TALB</span><span class="p">}</span> <span class="o">.</span> <span class="s">&quot;]. Avancement : [&quot;</span> <span class="o">.</span> <span class="nv">$xmms_avan</span> <span class="o">.</span> <span class="s">&quot;%].&quot;</span><span class="p">;</span>
+
+    <span class="c1">#On l&#39;&#39;affiche en emote</span>
+    <span class="nn">Xchat::</span><span class="n">commandf</span><span class="p">(</span><span class="s">&quot;me %s&quot;</span><span class="p">,</span> <span class="nv">$output_string</span><span class="p">);</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

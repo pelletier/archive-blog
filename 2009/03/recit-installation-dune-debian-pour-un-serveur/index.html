@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Récit : installation d'une Debian pour un serveur</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Récit : installation d'une Debian pour un serveur <a href="/2009/03/recit-installation-dune-debian-pour-un-serveur/">»</a></h1>
+        </div>
+        <p class="date">Published on March 29, 2009.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>Bien, je vais ici raconter ma petite histoire d&#39;installation d&#39;un serveur
+perso. Pour être plus précis, de l&#39;installation d&#39;un système de base Debian,
+l&#39;installation du serveur en lui même va se faire en plusieurs temps dans des
+billets séparés. Je vais passer les détails concernant la quête des divers
+composant. Au final, je me retrouve avec un PIII 650MHz 60Go de disque dur et
+192 Mo de RAM (et un lecteur DVD de base).</p>
+
+<p>Premièrement : choisir sa distrib à installer et préparer un CD. Moi choix
+s&#39;est encore porté sur une Debian (5.0, stable). Je télécharge l&#39;ISO de la
+version netinstall que je grave ensuite sur un CD grâce aux outils intégrés à
+GNOME. Une fois que la gravure est terminée, les hostilités peuvent commencer
+:</p>
+
+<p>On boot sur le CD, chargement de l&#39;interface. Au fil des écrans de
+configuration, je choisis Français / France pour la linguistique, &quot;homeNAS&quot;
+comme nom de machine et &quot;WORKGROUP&quot; comme domaine (pour le faire correspondre
+avec celui des autres machines, c&#39;est plus pratique).</p>
+
+<p>Suit le formatage des disques :
+Taille totale du disque dur : 61.5 Go</p>
+
+<ol>
+<li>60.9 Go : format de fichier ext3, montée sur <code>/</code></li>
+<li>575.7 Mo : swap</li>
+</ol>
+
+<p>En général, je met en taille de partition swap le double de la RAM de la
+machine, plus du rab.</p>
+
+<p>L&#39;installateur se débrouille pour récupérer les paquets (installation par
+Internet oblige) et les installe tranquillement. C&#39;est le moment d&#39;aller
+chercher un café :) .</p>
+
+<p>Enfin terminé, l&#39;installateur me demande le mot de passe root. Réflexe :
+<a href="http://strongpasswordgenerator.com/">Strongpasswordgenerator</a>.</p>
+
+<p>Configuration du premier utilisateur non-root : j&#39;ai pris comme nom :
+&quot;kizlum&quot;.</p>
+
+<p>Le panneau suivant me demande le miroir de l&#39;archive Debian : France</p>
+
+<blockquote>
+<p>ftp2.fr.debian.org.</p>
+</blockquote>
+
+<p>L&#39;installateur configure ensuite APT puis procède à plusieurs téléchargements
+et installations. La aussi, on peut faire une pause.</p>
+
+<p>Après toutes ces installations, il me demande si je veux ou non participer au
+popularity-contest. Même si j&#39;ai confiance en Debian, je n&#39;y participe pas pour
+des raisons que j&#39;expliciterais dans un billet postérieur.</p>
+
+<p>Il me demande ensuite quels logiciels installer : je décoche tout : je préfère
+partir avec un système le plus propre possible. L&#39;installateur télécharge et
+installe ensuite les paquets correspondant à ce que vous avez choisis dans les
+logiciels à installer. En dernier lieu, il installe et configure GRUB si vous
+lui dites &quot;oui&quot; au panneau suivant. C&#39;est ce que je m&#39;empresse de faire.</p>
+
+<p>L&#39;installateur exécute quelques scripts de post-installation et éjecte le CD en
+demandent de redémarrer : c&#39;est partit.</p>
+
+<p>L&#39;ordinateur redémarre sans soucis, GRUB s&#39;affiche et laisse la main au noyau,
+qui se charge et me laisse enfin la main. Connexion en tant que root dans un
+premier temps.</p>
+
+<p>Dans un premier temps, je vérifie que tout est bien à jour :</p>
+<div class="highlight"><pre>apt-get update
+aptitude safe-upgrade
+</pre>
+</div>
+
+<p>Voilà, l&#39;intallation est terminée, je vais ensuite écrire un billet par
+services à mettre en place.</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

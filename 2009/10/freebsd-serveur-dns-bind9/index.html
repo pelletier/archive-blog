@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | FreeBSD : serveur DNS Bind9</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>FreeBSD : serveur DNS Bind9 <a href="/2009/10/freebsd-serveur-dns-bind9/">»</a></h1>
+        </div>
+        <p class="date">Published on October 12, 2009.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p><em>Je pars ici sur le fait que vous avez d&#39;une part, les bases d&#39;utilisation
+d&#39;une <a href="http://www.freebsd.org/fr/">FreeBSD</a> (ou de n&#39;importe quelle autre BSD,
+voir distribution Linux) et d&#39;autre part un système FreeBSD récent (<a href="http://www.freebsd.org/releases/7.2R/announce.html">7
+series</a> actuellement)
+installé, fonctionnel et connecté à internet.</em></p>
+
+<p>Gardez en tête que je n&#39;aborde ici que les aspects techniques de l&#39;affaire, le
+domaine des DNS étant un trop vaste sujet.</p>
+
+<p>Je discerne deux utilisations d&#39;un serveur de noms :</p>
+
+<ol>
+<li><a href="#servir_de_cache_pour_le_rseau_local">Servir de cache pour le réseau local</a>
+: les postes utilisant le serveur verront leur vitesse de résolution de noms
+augmenter fortement (chez moi, je suis passé de 400ms à 6ms).</li>
+<li><a href="#agir_en_matre_dun_domaine">Agir en maître d&#39;un domaine</a> : cela vous
+permet, si vous possédez mondomaine.com, d&#39;indiquer au monde que
+serveur.mondomaine.com réside à telle ou telle adresse IP, entre autres.</li>
+</ol>
+
+<p>Bien sûr, il est possible de faire bien plus de choses avec Bind9, mais ça ne
+m&#39;intéresse pour le moment pas. Gardez aussi à l&#39;esprit que je présente une
+méthode pour atteindre les objectifs prévus. Il doit en exister pleins
+d&#39;autres. Si la mienne ne vous convient pas, et ben allez voir ailleurs !</p>
+<h2 id="installation-de-bind9">Installation de Bind9 <a href="#installation-de-bind9">»</a></h2>
+<p>En fait, cette section est plus faite pour faire beau qu&#39;autre chose, car Bind9
+(aussi connu sous le nom de <em>Named</em>) est installé par défaut sous FreeBSD. Pour
+l&#39;activer, rien de plus simple :</p>
+
+<ol>
+<li>Ajoutez <code>named_enable=&quot;YES&quot;</code> à <code>/etc/rc.conf</code>.</li>
+<li>Démarrez le démon : <code>/etc/rc.d/named start</code></li>
+</ol>
+
+<p>Néanmoins, je tiens à préciser un point : par défaut, Bind9 n&#39;écoute qu&#39;en
+local, c&#39;est-à-dire que seule la machine sur laquelle il tourne peut y accéder.
+Si vous voulez ouvrir votre serveur à l&#39;extérieur (votre réseau local, mais
+aussi le net), modifiez la ligne <code>listen-on { 192.168.0.16; };</code> dans
+<code>/etc/namedb/named.conf</code>.  Où <code>192.168.0.16</code> est l&#39;adresse IP sur le réseau
+local de la machine en question.</p>
+<h2 id="servir-de-cache-pour-le-rseau-local">Servir de cache pour le réseau local <a href="#servir-de-cache-pour-le-rseau-local">»</a></h2>
+<p>Bien. Tout se passe dans le fichier <code>/etc/namedb/named.conf</code>. Ouvrez le avec
+votre éditeur favori et suivez le guide.</p>
+<h3 id="exploiter-les-serveurs-dns-de-votre-fai">Exploiter les serveurs DNS de votre FAI <a href="#exploiter-les-serveurs-dns-de-votre-fai">»</a></h3>
+<p>Pour éviter que votre propre serveur DNS n&#39;ai a attaquer directement les
+serveurs DNS mondiaux (pour des raisons d&#39;efficacité et d&#39;encombrement de
+réseau), vous devez donner à Bind9 l&#39;IP du serveur DNS primaire <strong>et</strong>
+secondaire de votre FAI. Dans mon exemple, c&#39;est Numéricable, mais vous devriez
+pouvoir trouver les infos concernant le votre <a href="http://www.commentcamarche.net/faq/sujet-1496-serveurs-dns-des-principaux-fai">sur cette
+page</a>.</p>
+
+<p>Recherchez, décommentez et complétez l&#39;options <code>forwarders</code> comme ceci :</p>
+<div class="highlight"><pre>forwarders <span class="o">{</span>
+ 89.2.0.1;
+ 89.2.0.2;
+<span class="o">}</span>;
+</pre>
+</div>
+<h3 id="n39autoriser-que-votre-rseau-local">N&#39;autoriser que votre réseau local <a href="#n39autoriser-que-votre-rseau-local">»</a></h3>
+<p>Si vous laissiez votre serveur DNS répondre à n&#39;importe quelle machine, je
+pense que ça ferait bien mal à votre serveur, votre bande passante, et votre
+moral. C&#39;est pourquoi nous allons définir une <em>Acess Control List</em>, que vous
+allez adapter suivant votre configuration actuelle.</p>
+
+<p>Ajoutez ce bloc avant le bloc <code>options</code> du fichier de configuration :</p>
+<div class="highlight"><pre>acl localnet <span class="o">{</span>
+ 127.0.0.1/32;
+ 192.168.0.1/24;
+<span class="o">}</span>;
+</pre>
+</div>
+
+<p>Ici, je dit qu&#39;appartiendront au groupe <code>localnet</code> les ordinateurs ayant les
+ips de type <code>127.0.0.*</code> et <code>192.168.0.*</code>, autrement dit : le serveur lui même
+et les ordinateurs de mon réseau local.</p>
+<h3 id="les-permissions">Les permissions <a href="#les-permissions">»</a></h3>
+<p>Le plus gros du travail est fait. Maintenant vous devez dire à Bind9 qu&#39;il doit :</p>
+
+<ul>
+<li>Autoriser les requêtes venant de tous le monde (important pour la suite,
+voyez-ci après si vous ne voulez pas que ce soit le cas).</li>
+<li>N&#39;autoriser uniquement les membres du groupe <em>localnet</em> crée plus tôt
+à demander de résoudre un nom dont le serveur n&#39;est pas le maître (on appelle
+cela la <em>recursion</em>. C&#39;est plus compliquer que ça, mais on va laisser la
+théorie de côté pour aujourd&#39;hui).</li>
+</ul>
+
+<p>Dans le bloc <code>options</code> du fichier de configuration, ajoutez les 3 lignes suivantes :</p>
+<div class="highlight"><pre>allow-query     { &quot;any&quot;; };
+allow-transfer  { localnet; };
+allow-recursion { localnet; };
+</pre>
+</div>
+
+<p>Il est important que <code>allow-query</code> soit sur <code>any</code> si vous souhaitez agir en
+tant que maître d&#39;un domaine (voir ci-après). Si seul le cache vous intéresse,
+n&#39;accordez les requêtes que depuis <code>localnet</code> (pour éviter le flood) :
+<code>allow-query { localnet; };</code>.</p>
+
+<p>C&#39;est tout ! Redémarrez Bind9 : <code>/etc/rc.d/named restart</code>, et admirez.</p>
+<h2 id="agir-en-matre-d39un-domaine">Agir en maître d&#39;un domaine <a href="#agir-en-matre-d39un-domaine">»</a></h2>
+<p>Pour l&#39;exemple, je vais configurer un domaine local : <code>localnet</code>. Pour
+information, si vous voulez gérer un domaine international (<code>mondomaine.com</code>
+par exemple), c&#39;est exactement la même chose !</p>
+
+<p>Le but de mon domaine local est de fournir des adresses canoniques à certaines
+de mes machines :</p>
+
+<ul>
+<li>server.localnet -&gt; mon serveur perso : 192.168.0.16</li>
+<li>router.localnet -&gt; le routeur de la maison : 192.168.0.1</li>
+<li>hdd.localnet -&gt; le disque dur réseau : 192.168.0.14</li>
+</ul>
+
+<p>Et c&#39;est tout. Mais c&#39;est quand même déjà sympathique.</p>
+
+<p><em>Je ne vais pas rentrer dans le détail de la configuration. Les fichiers
+parlent d&#39;eux-mêmes, et si vous les trouvez obscur, Google arrivera à vous
+éclairer.</em></p>
+
+<p>Premièrement, créez et complétez le fichier <em>/etc/namedb/localnet</em> :</p>
+<div class="highlight"><pre>$TTL    2h
+
+@    IN    SOA    server.localnet. postmaster.localnet. (
+                             2009101201
+                             8H
+                             2H
+                             1W
+                             1D
+ )
+
+@    IN    NS    server.localnet.
+
+server        A    192.168.0.16
+router        A    192.168.0.1
+hdd           A    192.168.0.14
+</pre>
+</div>
+
+<p>C&#39;est ce fichier qui permet à Bind9 d&#39;associer une adresse IP à un nom (on lui
+donne le nom, il nous rend l&#39;IP). Il faut aussi qu&#39;il soit capable de faire
+l&#39;inverse : on lui donne une IP, il nous donne le nom. Le fichier qui s&#39;en
+occupe est relativement semblable.</p>
+
+<p>Créez et complétez le fichier <code>/etc/namedb/localnet.reverse</code> :</p>
+<div class="highlight"><pre>$TTL 2h
+@    IN    SOA    server.localnet. postmaster.localnet. (
+                              2009101201
+                              8H
+                              2H
+                              1W
+                              1D
+ )
+
+@    IN    NS    server.localnet.
+
+1     IN    PTR    router.localnet.
+16    IN    PTR    server.localnet.
+14    IN    PTR    hdd.localnet.
+</pre>
+</div>
+
+<p>Notez que les nombres à gauche sont la dernière partie de l&#39;adresse IP local de
+la machine cible. Exemple de mon routeur : son IP est <code>192.168.0.1</code> le numéro
+qui apparait en première place de sa ligne est donc 1.</p>
+
+<p>Vous devez ensuite dire à Bind9 qu&#39;il est le DNS maître du domaine <code>localnet</code>
+et qu&#39;il ne doit répondre pour ce domaine qu&#39;aux requête du groupe <code>localnet</code>
+(celui qu&#39;on a crée plus haut).</p>
+
+<p>Ajoutez à la fin du fichier <code>/etc/namedb/named.conf</code> :</p>
+<div class="highlight"><pre>zone &quot;localnet&quot; {
+ type master;
+ file &quot;/etc/namedb/localnet&quot;;
+ allow-query { localnet; };
+};
+
+zone &quot;0.168.192.in-addr.arpa&quot; {
+ type master;
+ file &quot;/etc/namedb/localnet.reverse&quot;;
+ allow-query { localnet; };
+};
+</pre>
+</div>
+
+<p>Vous devez faire attention ici dans le deuxième bloc : <code>0.168.192</code> est
+l&#39;inverse de <code>192.168.0</code>. Donc si vos IP de votre réseau local sont du genre
+<code>192.168.1.*</code>, vous devrez indiquer la zone <code>1.168.192.in-addr.arpa</code>.</p>
+
+<p>Redémarrez Bind9, et si votre ordinateur est configuré pour utiliser le serveur
+en tant que serveur DNS, vous devriez pouvoir ping <code>router.localnet</code> (dans mon
+exemple).</p>
+<h2 id="conclusion">Conclusion <a href="#conclusion">»</a></h2>
+<p>Voilà, c&#39;est tout. C&#39;est pas bien compliqué quand on y pense. Bon courage avec
+votre DNS !</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

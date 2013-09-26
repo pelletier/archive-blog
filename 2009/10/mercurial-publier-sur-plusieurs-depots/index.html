@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Mercurial : Publier sur plusieurs dÃ©pÃ´ts</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Mercurial : Publier sur plusieurs dÃ©pÃ´ts <a href="/2009/10/mercurial-publier-sur-plusieurs-depots/">»</a></h1>
+        </div>
+        <p class="date">Published on October 23, 2009.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <h2 id="le-problme">Le problème <a href="#le-problme">»</a></h2>
+<p>Vous avez plusieurs dépôts Mercurial, en général un principal et un miroir
+(pour la sauvegarde). Cependant, toujours garder les deux dépôts synchronisés
+n&#39;est pas toujours une mince affaire.</p>
+<h2 id="une-solution">Une solution <a href="#une-solution">»</a></h2>
+<p>Ayant fait face au problème ci-dessus il y a peu, j&#39;ai cherché une solution qui
+pourrait le résoudre. Impossible cependant, de mettre la main sur quoi que ce
+soit. J&#39;ai donc décider d&#39;écrire ma première extension pour Mercurial. Voici
+<a href="http://bitbucket.org/pelletier/hg-publishall/">hg-publishall</a>. Une extension
+simple qui rajoute une commande à l&#39;outil <code>hg</code> : <code>pushall</code>. Lors de son
+exécution, l&#39;extension va lire le fichier <code>.hg/hgrc</code> du dépôt et y récupérer
+tous les éléments dans <code>[paths]</code>, et pour chaque va effectuer un <code>hg push
+&lt;url_du_depot&gt;</code></p>
+<h3 id="installation">Installation <a href="#installation">»</a></h3>
+<p>Récupérez la dernière version du script : <a href="http://bitbucket.org/pelletier/hg-publishall/get/tip.zip">hg-publishall
+(trunk)</a>.
+Décompressez l&#39;archive et déplacez le script <code>publishall.py</code> là où vous placez
+vos extensions Mercurial (chez moi c&#39;est <code>/Users/thomas/Library/Mercurial/</code>).
+Pensez à le rendre exécutable par le ou les utilisateurs qui vont utiliser le
+script (<code>chmod +x publishall.py</code> sous Linux/BSD).</p>
+
+<p>Vous devez ensuite configurer le dépôt qui va bénéficier de cette extension :</p>
+
+<p>Soit le dépôt <code>~/depot-test/</code>, j&#39;ouvre le fichier <code>~/depot-test/.hg/hgrc</code> et le
+modifie comme suit :</p>
+<div class="highlight"><pre><span class="k">[paths]</span>
+<span class="na">default</span> <span class="o">=</span> <span class="s">ssh://server.localnet/depot-test/</span>
+<span class="na">bitbucket</span> <span class="o">=</span> <span class="s">https://:&lt;user&gt;:&lt;pass&gt;@bitbucket.org/&lt;user&gt;/depot-test/</span>
+
+<span class="k">[extensions]</span>
+<span class="na">publishall</span> <span class="o">=</span> <span class="s">/Users/thomas/Library/Mercurial/publishall.py</span>
+</pre>
+</div>
+
+<p>Votre dépôt est maintenant configuré pour utiliser l&#39;extension hg-publishall;
+et il sera publié sur deux autres dépôts : default (un dépôt sur le serveur du
+réseau local) et bitbucket (notez au passage que l&#39;authentification sur les
+dépôts distant est exactement la même qu&#39;ailleurs dans Mercurial).</p>
+<h3 id="utilisation">Utilisation <a href="#utilisation">»</a></h3>
+<p>Rien de bien compliqué. Toujours dans <code>~/depot-test/</code>, après y avoir travaillé
+un peu comme vous en avez l&#39;habitude, il suffit de taper <code>$ hg pushall</code>.  Et
+c&#39;est parti, les modifications que vous avez effectué sur le dépôt vont être
+publiées. Pour information : vous pouvez aussi utiliser <code>hg pusha</code>, qui est un
+alias à <code>hg pushall</code>.</p>
+<h2 id="conclusion">Conclusion <a href="#conclusion">»</a></h2>
+<p>Amusez vous bien, et n&#39;hésitez pas à faire
+remonter](http://bitbucket.org/pelletier/hg-publishall/issues/) tout ce que vous
+pouvez !</p>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Thomas Pelletier | Low-memory mail client</title>
+   
+    <link rel="copyright" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" type="text/html;charset=utf-8"/>
+
+    <!-- Feed -->
+    <link href="http://feeds.feedburner.com/ThomasPelletier"
+          rel="alternate" title="Thomas Pelletier"
+          type="application/atom+xml"/> 
+
+     <!-- OpenID -->
+    <link rel="openid.server" href="http://www.myopenid.com/server" />
+    <link rel="openid.delegate" href="http://pelletiert.myopenid.com/" />
+    <link rel="openid2.local_id" href="http://pelletiert.myopenid.com" />
+    <link rel="openid2.provider" href="http://www.myopenid.com/server" />
+    <meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=pelletiert.myopenid.com" />
+
+    <!-- Google webmaster tools -->
+    <meta name="google-site-verification" content="kPgkbW4Fp5VsBrbrhH3B_OMQNgBHMh-nTfNl5DJX6J4" />
+
+    <!-- Handled -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- The 1140px Grid -->
+    <link rel="stylesheet" href="/assets/css/1140-cbb7aab4218.css" type="text/css" media="screen" />
+    
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="/assets/css/ie-cb786208ca6.css" type="text/css" media="screen" />
+    <![endif]-->
+
+    <link href='http://fonts.googleapis.com/css?family=Crimson+Text:regular,regularitalic,600,600italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="/assets/css/smallerscreen-cba2add5881.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile-cb71f52e9d9.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/screen-cb563f0e3d8.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/assets/css/smaller_screen-cbe79d4b54a.css" media="only screen and (max-width: 1023px)" />
+    <link rel="stylesheet" href="/assets/css/mobile_custom-cbe0612c514.css" media="handheld, only screen and (max-width: 767px)" />
+    <link rel="stylesheet" href="/assets/css/syntax-cb0d36c27fc.css" type="text/css" />
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="/assets/js/jquery-1.4.4.min-cb73a9c334c.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.timeago-cba50fad29f.js"></script>
+  
+</head>
+<body>
+
+<div class="thin"></div>
+<a class="ribbon" href="/"></a>
+
+<div class="inner">
+    <div class="container">
+        <div class="post_back">
+    <a href="/">Home</a>
+</div>
+
+
+
+<div class="row post">
+    <div class="twelvecol">
+        <div class="post_title">
+            <h1>Low-memory mail client <a href="/2010/10/low-memory-mail-client/">»</a></h1>
+        </div>
+        <p class="date">Published on October 26, 2010.
+        
+        Last edited on August 07, 2011.
+        
+        </p>
+        <a href="http://twitter.com/share" class="twitter-share-button" data-count="vertical">Tweet</a>
+
+        <p>I have a MacBookPro which has 2GB of RAM and I always have many applications
+launched, so the whole memory is almost always fully used. Therefore I try to
+find new ways to use the smallest amount of memory. Today, I fought with
+mails. I love mails, so I can&#39;t get rid of them, and I love them so much that
+I must be able to read and compose e-mails even when I don&#39;t have an Internet
+access (this feature has already saved my life, many times).</p>
+
+<p><a href="http://goo.gl/wp9A5">Mail.app</a>, the Apple&#39;s built-in mail client is correct
+(ie, I don&#39;t want to punch my computer screen each time I have to deal with
+it), but has a very large memory footprint: more or less 70MB of RAM. Not
+sustainable in my case.
+<a href="http://gmail.com/">Google&#39;s Gmail</a> is great, but it does not allow me to read
+and write e-mails offline on MacOS X, so it is a dead end.
+Finally, <a href="http://www.mozillamessaging.com/en-US/">Thunderbird</a> is so slow that
+I sometime wonder whether it is frozen or not. Having a small memory footprint
+is a thing, being usable is another.</p>
+
+<p>So let&#39;s introduce <a href="http://www.mutt.org">Mutt</a>, a clean and efficient
+command-line based mail client.</p>
+
+<blockquote>
+<p>&quot;Mutt is a small but very powerful text-based mail client for Unix
+ operating systems.&quot;
+(<a href="http://www.mutt.org/">mutt.org</a>)</p>
+</blockquote>
+
+<p>I really love the customizability of Mutt, but its installation and
+configuration are not really straightforward if you want to have a clean and
+efficient application. Here is how I did. Please note that I am going to
+describe <em>my</em> configuration, which is based upon Gmail IMAP accounts.  You may
+have to sightly adapt it to your needs.</p>
+<h2 id="table-of-contents">Table of contents <a href="#table-of-contents">»</a></h2>
+<p><div class="toc"><ul><li><a href="#prerequisites">Prerequisites</a></li><li><a href="#may-the-keychain-be-with-you">May the keychain be with you</a></li><li><a href="#offline-matters">Offline matters</a></li><li><ul><li><a href="#installation">Installation</a></li><li><a href="#configuration">Configuration</a></li></ul></li><li><a href="#mutt-here-we-are">Mutt, here we are</a></li><li><ul><li><a href="#installation">Installation</a></li><li><a href="#configuration">Configuration</a></li></ul></li><li><a href="#sources">Sources</a></li><li><a href="#edits">Edits</a></li><li><ul><li><a href="#august-07-2011">August 07, 2011</a></li><li><a href="#older">Older</a></li></ul></li></ul></div></p>
+<h2 id="prerequisites">Prerequisites <a href="#prerequisites">»</a></h2>
+<p>I am going to assume that you are already familiar with OS X, its terminal and
+UNIX command line basics. If you are not, well, Mutt is probably not for you,
+yet if you really want to use it, there are plenty of resources online to learn
+these things.</p>
+
+<p>Furthermore, I am going to use <a href="http://mxcl.github.com/homebrew/">Homebrew</a> to
+install pieces of software. In order to install it, just run the following in
+your terminal:</p>
+<div class="highlight"><pre>ruby -e <span class="sb">`</span><span class="k">$(</span>curl -fsS http://gist.github.com/raw/323731/install_homebrew.rb<span class="k">)</span><span class="sb">`</span>
+</pre>
+</div>
+
+<p>More detailed instructions are available on the <a href="http://github.com/mxcl/homebrew/wiki/installation">dedicated GitHub wiki
+page</a>.</p>
+<h2 id="may-the-keychain-be-with-you">May the keychain be with you <a href="#may-the-keychain-be-with-you">»</a></h2>
+<p>I hate storing my passwords in plaintext files. Really. So let&#39;s use Mac OS
+X built-in keychain. First, you have to register your keys. Just open the
+keychain utility (it is located in <code>/Applications/Utilities/</code>) and add one or
+more &quot;internet passwords&quot;. For instance:</p>
+
+<p><img src="/assets/images/posts/keychain-cbd4ad1cf69.png" alt="Keychain Example"></p>
+
+<p>Once you have registered all your keys, we have to write a simple Python
+script, which will allows offlineimap (see bellow) to retrieve passwords from
+the keychain. Create and fill <code>~/.mutt/offlineimap.py</code> with the following:</p>
+<div class="highlight"><pre><span class="c">#!/usr/bin/python</span>
+<span class="kn">import</span> <span class="nn">re</span><span class="o">,</span> <span class="nn">commands</span>
+<span class="k">def</span> <span class="nf">get_keychain_pass</span><span class="p">(</span><span class="n">account</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&#39;security&#39;</span><span class="p">:</span> <span class="s">&#39;/usr/bin/security&#39;</span><span class="p">,</span>
+        <span class="s">&#39;command&#39;</span><span class="p">:</span> <span class="s">&#39;find-internet-password&#39;</span><span class="p">,</span>
+        <span class="s">&#39;account&#39;</span><span class="p">:</span> <span class="n">account</span><span class="p">,</span>
+        <span class="s">&#39;server&#39;</span><span class="p">:</span> <span class="n">server</span>
+    <span class="p">}</span>
+    <span class="n">command</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%(security)s</span><span class="s"> </span><span class="si">%(command)s</span><span class="s"> -g -a </span><span class="si">%(account)s</span><span class="s"> -s </span><span class="si">%(server)s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">params</span>
+    <span class="n">outtext</span> <span class="o">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">getoutput</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">r&#39;password: &quot;(.*)&quot;&#39;</span><span class="p">,</span> <span class="n">outtext</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre>
+</div>
+
+<p>It&#39;s enough for the keychain integration. Let&#39;s move further with the offline
+thing.</p>
+<h2 id="offline-matters">Offline matters <a href="#offline-matters">»</a></h2>
+<p>First and foremost, e-mails must be available offline. Hopefully, a script has
+already been written to achieve this, and it is called
+<a href="http://github.com/nicolas33/offlineimap">offlineimap</a>, and is written by <a href="http://changelog.complete.org/">John
+Goerzen</a>. It is now supported by Nicolas
+Sebrecht.</p>
+<h3 id="installation">Installation <a href="#installation">»</a></h3>
+<p>Download the latest trunk on GitHub, either by cloning the repository or
+downloading the <a href="http://github.com/nicolas33/offlineimap/tarball/master">automatically built source
+archive</a>. Once you&#39;ve
+got the source, just run</p>
+
+<p><code>python setup.py install</code></p>
+<h3 id="configuration">Configuration <a href="#configuration">»</a></h3>
+<p>Now we have to tell it where to put the the mail, and where to grab it from. So
+create and edit <code>~/.offlineimaprc</code> with something like that (adapt to your
+settings):</p>
+<div class="highlight"><pre><span class="k">[general]</span>
+<span class="na">ui</span> <span class="o">=</span> <span class="s">TTY.TTYUI</span>
+<span class="na">accounts</span> <span class="o">=</span> <span class="s">GMail, Pelletier</span>
+<span class="na">pythonfile</span><span class="o">=</span><span class="s">~/.mutt/offlineimap.py</span>
+
+<span class="k">[Account GMail]</span>
+<span class="na">localrepository</span> <span class="o">=</span> <span class="s">Gmail-Local</span>
+<span class="na">remoterepository</span> <span class="o">=</span> <span class="s">Gmail-Remote</span>
+
+<span class="k">[Account Pelletier]</span>
+<span class="na">localrepository</span> <span class="o">=</span> <span class="s">Pelletier-Local</span>
+<span class="na">remoterepository</span> <span class="o">=</span> <span class="s">Pelletier-Remote</span>
+
+<span class="k">[Repository Gmail-Local]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">Maildir</span>
+<span class="na">localfolders</span> <span class="o">=</span> <span class="s">~/Mail/GMail</span>
+
+<span class="k">[Repository Pelletier-Local]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">Maildir</span>
+<span class="na">localfolders</span> <span class="o">=</span> <span class="s">~/Mail/Pelletier</span>
+
+<span class="k">[Repository Gmail-Remote]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">Gmail</span>
+<span class="na">remoteuser</span> <span class="o">=</span> <span class="s">pelletier.thomas@gmail.com</span>
+<span class="na">remotepasseval</span> <span class="o">=</span> <span class="s">get_keychain_pass(account=&quot;pelletier.thomas@gmail.com&quot;, server=&quot;imap.gmail.com&quot;)</span>
+<span class="na">realdelete</span> <span class="o">=</span> <span class="s">no</span>
+<span class="na">nametrans</span> <span class="o">=</span> <span class="s">lambda folder: re.sub(&#39;.*Spam$&#39;, &#39;spam&#39;, re.sub(&#39;.*Drafts$&#39;, &#39;drafts&#39;, re.sub(&#39;.*Sent Mail$&#39;, &#39;sent&#39;, re.sub(&#39;.*Starred$&#39;, &#39;flagged&#39;, re.sub(&#39;.*Trash$&#39;, &#39;trash&#39;, re.sub(&#39;.*All Mail$&#39;, &#39;archive&#39;, folder))))))</span>
+
+<span class="k">[Repository Pelletier-Remote]</span>
+<span class="na">type</span> <span class="o">=</span> <span class="s">Gmail</span>
+<span class="na">remoteuser</span> <span class="o">=</span> <span class="s">thomas@pelletier.im</span>
+<span class="na">remotepasseval</span> <span class="o">=</span> <span class="s">get_keychain_pass(account=&quot;thomas@pelletier.im&quot;, server=&quot;imap.gmail.com&quot;)</span>
+<span class="na">realdelete</span> <span class="o">=</span> <span class="s">no</span>
+<span class="na">nametrans</span> <span class="o">=</span> <span class="s">lambda folder: re.sub(&#39;.*Spam$&#39;, &#39;spam&#39;, re.sub(&#39;.*Drafts$&#39;, &#39;drafts&#39;, re.sub(&#39;.*Sent Mail$&#39;, &#39;sent&#39;, re.sub(&#39;.*Starred$&#39;, &#39;flagged&#39;, re.sub(&#39;.*Trash$&#39;, &#39;trash&#39;, re.sub(&#39;.*All Mail$&#39;, &#39;archive&#39;, folder))))))</span>
+</pre>
+</div>
+
+<p>As you can see, the configuration is the same for both GMail and Google Apps
+accounts, and that we have to setup a mapping between GMail&#39;s folders and the
+local ones. Now you can create <code>~/Mail</code>, test your configuration and do the
+first synchronization (beware, it is going to be very long):</p>
+<div class="highlight"><pre>mkdir ~/Mail <span class="o">&amp;&amp;</span> offlineimap -o
+</pre>
+</div>
+
+<p>Once it works, we have to create a script and a Cron job to automate this job.
+Here is the script (<code>~/.sync_mail.sh</code>, chmod to +x):</p>
+<div class="highlight"><pre><span class="c">#!/bin/sh</span>
+/usr/local/bin/offlineimap -o -c /Users/thomas/.offlineimaprc -u Noninteractive.Quiet
+<span class="nb">exit </span>0
+</pre>
+</div>
+
+<p>And the Cron entry:</p>
+
+<p><code>*/3 * * * * /Users/thomas/.sync_mail.sh</code></p>
+<h2 id="mutt-here-we-are">Mutt, here we are <a href="#mutt-here-we-are">»</a></h2><h3 id="installation">Installation <a href="#installation">»</a></h3>
+<p>Well, it&#39;s as easy as a <code>sudo brew install mutt</code>. If you want a sidebar
+allowing you to navigate between your mailboxes, you can supply the
+<code>--sidebar-patch</code> option to brew to make it apply the
+<a href="https://raw.github.com/nedos/mutt-sidebar-patch/master/mutt-sidebar.patch">sidebar patch</a>:</p>
+<div class="highlight"><pre>brew install --sidebar-patch
+</pre>
+</div>
+<h3 id="configuration">Configuration <a href="#configuration">»</a></h3>
+<p>Mutt&#39;s configuration lives in the <code>~/.mutt</code> folder. Let&#39;s begin with
+<code>~/.mutt/muttrc</code>:</p>
+<div class="highlight"><pre><span class="nb">set </span><span class="nv">editor</span> <span class="o">=</span> <span class="s2">&quot;mvim -f +/^$&quot;</span>
+<span class="nb">set </span><span class="nv">mbox_type</span> <span class="o">=</span> Maildir
+<span class="nb">set </span><span class="nv">folder</span> <span class="o">=</span> ~/Mail
+<span class="nb">set </span><span class="nv">spoolfile</span> <span class="o">=</span> <span class="s2">&quot;+Pelletier/INBOX&quot;</span>
+<span class="nb">set </span><span class="nv">mail_check</span> <span class="o">=</span> 0
+<span class="nb">unset </span>move
+<span class="nb">set </span>delete
+<span class="nb">unset </span>confirmappend
+<span class="nb">set </span>quit
+<span class="nb">unset </span>mark_old
+<span class="nb">set </span>beep_new
+<span class="nb">set </span>edit_headers
+<span class="nb">set </span><span class="nv">realname</span> <span class="o">=</span> <span class="s2">&quot;Thomas Pelletier&quot;</span>
+<span class="nb">set </span>reply_to
+<span class="nb">set </span><span class="nv">sort</span> <span class="o">=</span> threads
+<span class="nb">set </span><span class="nv">sort_aux</span> <span class="o">=</span> reverse-last-date-received
+mailboxes +GMail/INBOX +GMail/archive +GMail/sent +GMail/drafts +GMail/spam +GMail/trash
+mailboxes +Pelletier/INBOX +Pelletier/archive +Pelletier/sent +Pelletier/drafts +Pelletier/spam +Pelletier/trash
+
+folder-hook GMail/* <span class="nb">source</span> ~/.mutt/gmail.muttrc
+folder-hook Pelletier/* <span class="nb">source</span> ~/.mutt/pelletier.mutrc
+</pre>
+</div>
+
+<p>So, what is important here? The spoolfile is the default mailbox, the one which
+opens when you fire Mutt. Folder-hooks allow us to define per mailbox
+configuration, but it is not our topic. Finally, if you do not use macvim, or
+don&#39;t want to use it to compose your e-mails, change the editor configuration.</p>
+
+<p><img src="/assets/images/posts/mutt-cbbbd180470.png" alt="Mutt"></p>
+
+<p>Pretty cool isn&#39;t it? Now it&#39;s time to browse the web to find many Mutt
+interface tweaks. If you want, you can take a look at
+<a href="https://bitbucket.org/pelletier/dotfiles/src/tip/mutt/">my mutt configuration files</a>.
+Have a lot of fun!</p>
+<h2 id="sources">Sources <a href="#sources">»</a></h2>
+<p>When I set up my Mutt, I read pbrisbin&#39;s excellent <a href="http://pbrisbin.com/posts/two_accounts_in_mutt/">Two IMAP accounts in
+Mutt</a>, and many others that
+I forgot to bookmark.</p>
+<h2 id="edits">Edits <a href="#edits">»</a></h2><h3 id="august-07-2011">August 07, 2011 <a href="#august-07-2011">»</a></h3>
+<ul>
+<li>Offlineimap moved, and changed its maintainer.</li>
+<li>Don&#39;t forget to create the <code>~/Mail</code> directory.</li>
+<li>Add the sidebar patch option to the mutt installation.</li>
+<li>Add a link to my dot files.</li>
+</ul>
+<h3 id="older">Older <a href="#older">»</a></h3>
+<ul>
+<li>Thanks to <a href="http://twitter.com/stevelosh/">Steve Losh</a> for pointing out all my
+mistakes.</li>
+</ul>
+
+    </div>
+</div>
+
+<div class="row post disqus">
+    <div class="twelvecol">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'kiznet';
+            (function() {
+                var dsq = document.createElement('script');
+                dsq.type = 'text/javascript';
+                dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+    </div>
+</div>
+
+<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer_bar">
+        <div class="container">
+            <div class="row">
+                <div class="fourcol">
+                    <h3>Latest blog entries</h3>
+                    <ul class="latest">
+  
+    <li>
+      <a href="/2012/02/switching-to-nanoc/">Switching to nanoc, and more</a>
+    </li>
+  
+    <li>
+      <a href="/2012/01/freebsd-afp-timemachine-updated/">FreeBSD, AFP, Time Machine</a>
+    </li>
+  
+    <li>
+      <a href="/2011/12/kindle/">Kindle</a>
+    </li>
+  
+    <li>
+      <a href="/2011/09/mixing-django-forms/">Mixing Django Forms</a>
+    </li>
+  
+    <li>
+      <a href="/2011/05/convex-hull-ocaml/">Convex hull algorithm in Ocaml</a>
+    </li>
+  
+    <li>
+      <a href="/2011/04/git-django-deployment/">Git-based Django deployment</a>
+    </li>
+  
+</ul>
+
+                </div>
+                <div class="fourcol">
+                    <h3>Quicklinks</h3>
+                    <ul>
+                        <li><a href="/archives/">Blog archives</a></li>
+                        <li><a href="http://bitbucket.org/pelletier/">Bitbucket
+                            page</a></li>
+                        <li><a href="http://github.com/pelletier">GitHub page</a></li>
+                        <li><a href="/colophon/">Colophon</a></li>
+                        <li><a href="http://amzn.com/w/MYFYMAK5KYUB">Amazon whish list</a></li>
+                    </ul>
+                </div>
+                <div class="fourcol last contact">
+                    <ul>
+                        <li>
+                            <a href="gtalk:chat?hid=pelletier.thomas@gmail.com"
+                               class="im" title='IM'><span>IM</span></a>
+                        </li>
+                        <li>
+                            <a href="mailto:thomas@pelletier.im"
+                               class="mail" title='Mail'><span>Mail</span></a>
+                        </li>
+                        <li>
+                            <a href="http://twitter.com/thompelletier/"
+                               class="twitter"
+                               title='Twitter'><span>Twitter</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="final_bar">
+    <div class="row">
+        <div class="twelvecol copyright">
+            &copy; 2008 - <span class='now'>now</span> Thomas Pelletier &bull;
+
+            <a href="http://creativecommons.org/licenses/by-sa/3.0/"
+               rel="license">CC BY-SA</a>
+
+           &bull;
+           Fork me on
+           <a href="https://github.com/pelletier/blog/">Github</a>
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/site-cb6bd57e135.js"></script>
+
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17713470-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+</html>
