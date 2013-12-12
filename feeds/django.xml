@@ -5,7 +5,7 @@
  <subtitle>Django-related posts</subtitle>
  <link href="http://thomas.pelletier.im/feeds/django.xml" rel="self"/>
  <link href="http://thomas.pelletier.im/"/>
- <updated>2013-09-26T10:35:21Z</updated>
+ <updated>2013-12-12T17:14:05Z</updated>
  <id>http://thomas.pelletier.im/feeds/django</id>
  <author>
    <name>Thomas Pelletier</name>
@@ -23,7 +23,7 @@
             <entry>
                 <title>Mixing Django Forms</title>
                 <link href="http://thomas.pelletier.im/2011/09/mixing-django-forms" />
-                <updated>2011-09-02T23:00:00Z</updated>
+                <updated>2011-09-02T22:00:00Z</updated>
                 <id>http://thomas.pelletier.im/2011/09/mixing-django-forms</id>
                 <content type="html">&lt;p&gt;So you ever wanted to mix a simple Django form (subclass of
 &lt;code&gt;django.forms.Form&lt;/code&gt;) and a model form (subclass of &lt;code&gt;django.forms.ModelForm&lt;/code&gt;)?&lt;/p&gt;
@@ -216,7 +216,7 @@ appreciated!&lt;/p&gt;
             <entry>
                 <title>Git-based Django deployment</title>
                 <link href="http://thomas.pelletier.im/2011/04/git-django-deployment" />
-                <updated>2011-04-12T23:00:00Z</updated>
+                <updated>2011-04-12T22:00:00Z</updated>
                 <id>http://thomas.pelletier.im/2011/04/git-django-deployment</id>
                 <content type="html">&lt;p&gt;If you ever used &lt;a href=&quot;http://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt; (or any similar service), you
 may be jealous of their straightforward way to deploy new versions of
@@ -363,7 +363,7 @@ to do this (it works flawlessly).&lt;/p&gt;
             <entry>
                 <title>Rails-like configuration style for Django</title>
                 <link href="http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django" />
-                <updated>2010-08-21T23:00:00Z</updated>
+                <updated>2010-08-21T22:00:00Z</updated>
                 <id>http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django</id>
                 <content type="html">&lt;p&gt;Django&amp;#39;s default settings system is not very suitable for multiple
 configuration profiles — development, testing, production and so on: you have
@@ -408,7 +408,7 @@ to add this line to the &amp;#39;bin/activate&amp;#39; script of the correspondi
             <entry>
                 <title>Gunicorn / Django Debian init script</title>
                 <link href="http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script" />
-                <updated>2010-05-08T23:00:00Z</updated>
+                <updated>2010-05-08T22:00:00Z</updated>
                 <id>http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script</id>
                 <content type="html">&lt;p&gt;This is a simple Debian init.d script for my self-hosted Django/Gunicorn
 websites. Note that it runs inside a virtualenv (my installed Django versions
@@ -517,7 +517,7 @@ reload&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
             <entry>
                 <title>Test your django-piston API (with auth)</title>
                 <link href="http://thomas.pelletier.im/2009/12/test-your-django-piston-api-with-auth" />
-                <updated>2009-12-17T00:00:00Z</updated>
+                <updated>2009-12-16T23:00:00Z</updated>
                 <id>http://thomas.pelletier.im/2009/12/test-your-django-piston-api-with-auth</id>
                 <content type="html">&lt;p&gt;I have to build the API for one of my web service. It is Django and
 django-piston powered application and it works well. Okay. I chose the &lt;a href=&quot;http://en.wikipedia.org/wiki/Test_Driven_Development&quot;&gt;TDD

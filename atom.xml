@@ -4,7 +4,7 @@
  <title>Thomas Pelletier</title>
  <link href="http://thomas.pelletier.im/atom.xml" rel="self"/>
  <link href="http://thomas.pelletier.im/"/>
- <updated>2013-09-26T10:35:21Z</updated>
+ <updated>2013-12-12T17:14:05Z</updated>
  <id>http://thomas.pelletier.im/</id>
  <author>
    <name>Thomas Pelletier</name>
@@ -16,7 +16,7 @@
  <entry>
      <title>Switching to nanoc, and more</title>
      <link href="http://thomas.pelletier.im/2012/02/switching-to-nanoc"/>
-     <updated>2012-02-25T00:00:00Z</updated>
+     <updated>2012-02-24T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2012/02/switching-to-nanoc</id>
      <content type="html">&lt;p&gt;I started using a static website generator about a year ago. I really don&amp;#39;t
 regret the switch: working with text files and don&amp;#39;t having to worry about
@@ -116,7 +116,7 @@ investigated.&lt;/p&gt;
  <entry>
      <title>FreeBSD, AFP, Time Machine</title>
      <link href="http://thomas.pelletier.im/2012/01/freebsd-afp-timemachine-updated"/>
-     <updated>2012-01-21T00:00:00Z</updated>
+     <updated>2012-01-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2012/01/freebsd-afp-timemachine-updated</id>
      <content type="html">&lt;p&gt;About two years ago, I wrote &lt;a href=&quot;http://thomas.pelletier.im/2010/01/time-machine-freebsd-and-afp-are-on-a-little-boat/&quot;&gt;a post&lt;/a&gt; about setting up an AFP server to host
 a Time Machine backup on a FreeBSD box. However time passed and Netatalk (the
@@ -191,7 +191,7 @@ more than happy to help to figure out a solution!&lt;/p&gt;
  <entry>
      <title>Kindle</title>
      <link href="http://thomas.pelletier.im/2011/12/kindle"/>
-     <updated>2011-12-31T00:00:00Z</updated>
+     <updated>2011-12-30T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2011/12/kindle</id>
      <content type="html">&lt;p&gt;Because I enjoy reading and love technology, I got an &lt;a href=&quot;http://www.amazon.fr/dp/B0051QVF7A&quot;&gt;Amazon
 Kindle&lt;/a&gt; for Christmas. So it has been
@@ -299,7 +299,7 @@ resistant to technology (which is really understandable).&lt;/p&gt;
  <entry>
      <title>Mixing Django Forms</title>
      <link href="http://thomas.pelletier.im/2011/09/mixing-django-forms"/>
-     <updated>2011-09-02T23:00:00Z</updated>
+     <updated>2011-09-02T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2011/09/mixing-django-forms</id>
      <content type="html">&lt;p&gt;So you ever wanted to mix a simple Django form (subclass of
 &lt;code&gt;django.forms.Form&lt;/code&gt;) and a model form (subclass of &lt;code&gt;django.forms.ModelForm&lt;/code&gt;)?&lt;/p&gt;
@@ -488,7 +488,7 @@ appreciated!&lt;/p&gt;
  <entry>
      <title>Convex hull algorithm in Ocaml</title>
      <link href="http://thomas.pelletier.im/2011/05/convex-hull-ocaml"/>
-     <updated>2011-05-24T23:00:00Z</updated>
+     <updated>2011-05-24T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2011/05/convex-hull-ocaml</id>
      <content type="html">&lt;p&gt;I had to write a simple &lt;a href=&quot;http://caml.inria.fr/&quot;&gt;OCaml&lt;/a&gt; program for school which
 compute the &lt;a href=&quot;http://en.wikipedia.org/wiki/Convex_hull&quot;&gt;convex hull&lt;/a&gt; of a finite
@@ -509,7 +509,7 @@ algorithm, and then I wrote a simple GUI to display the points and the hull.&lt;
  <entry>
      <title>Git-based Django deployment</title>
      <link href="http://thomas.pelletier.im/2011/04/git-django-deployment"/>
-     <updated>2011-04-12T23:00:00Z</updated>
+     <updated>2011-04-12T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2011/04/git-django-deployment</id>
      <content type="html">&lt;p&gt;If you ever used &lt;a href=&quot;http://www.heroku.com/&quot;&gt;Heroku&lt;/a&gt; (or any similar service), you
 may be jealous of their straightforward way to deploy new versions of
@@ -648,7 +648,7 @@ to do this (it works flawlessly).&lt;/p&gt;
  <entry>
      <title>Flickmator</title>
      <link href="http://thomas.pelletier.im/2011/02/flickmator"/>
-     <updated>2011-02-20T00:00:00Z</updated>
+     <updated>2011-02-19T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2011/02/flickmator</id>
      <content type="html">&lt;p&gt;(Prefer &lt;a href=&quot;http://instagr.am/&quot;&gt;Instagram&lt;/a&gt; to Flickr? Give the excellent
 &lt;a href=&quot;http://whyhello.im/samrat&quot;&gt;Samrat Man Singh&lt;/a&gt;&amp;#39;s
@@ -693,7 +693,7 @@ the initial service; which would be rather exciting don&amp;#39;t you think?&lt;
  <entry>
      <title>Low-memory mail client</title>
      <link href="http://thomas.pelletier.im/2010/10/low-memory-mail-client"/>
-     <updated>2010-10-25T23:00:00Z</updated>
+     <updated>2010-10-25T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/10/low-memory-mail-client</id>
      <content type="html">&lt;p&gt;I have a MacBookPro which has 2GB of RAM and I always have many applications
 launched, so the whole memory is almost always fully used. Therefore I try to
@@ -912,7 +912,7 @@ mistakes.&lt;/li&gt;
  <entry>
      <title>Rework by 37signals</title>
      <link href="http://thomas.pelletier.im/2010/08/rework-by-37signals"/>
-     <updated>2010-08-29T23:00:00Z</updated>
+     <updated>2010-08-29T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/08/rework-by-37signals</id>
      <content type="html">&lt;p&gt;I did a one-month internship at &lt;a href=&quot;http://novapost.fr/&quot;&gt;Novapost.fr&lt;/a&gt; on August
 (more about this in a future blog entry). When I left, they offered me
@@ -969,7 +969,7 @@ see business management, I highly advise you to read this book!&lt;/p&gt;
  <entry>
      <title>Rails-like configuration style for Django</title>
      <link href="http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django"/>
-     <updated>2010-08-21T23:00:00Z</updated>
+     <updated>2010-08-21T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/08/rails-like-configuration-style-for-django</id>
      <content type="html">&lt;p&gt;Django&amp;#39;s default settings system is not very suitable for multiple
 configuration profiles — development, testing, production and so on: you have
@@ -1002,7 +1002,7 @@ to add this line to the &amp;#39;bin/activate&amp;#39; script of the correspondi
  <entry>
      <title>Websocket + Tornado + Redis</title>
      <link href="http://thomas.pelletier.im/2010/08/websocket-tornado-redis"/>
-     <updated>2010-08-16T23:00:00Z</updated>
+     <updated>2010-08-16T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/08/websocket-tornado-redis</id>
      <content type="html">&lt;p&gt;Here is a simple example of a &lt;a href=&quot;http://en.wikipedia.org/wiki/WebSockets&quot;&gt;Websocket&lt;/a&gt; + &lt;a href=&quot;http://www.tornadoweb.org/&quot;&gt;Tornado&lt;/a&gt; + &lt;a href=&quot;http://code.google.com/p/redis/&quot;&gt;Redis&lt;/a&gt; &lt;a href=&quot;http://code.google.com/p/redis/wiki/PublishSubscribe&quot;&gt;Pub/Sub protocol&lt;/a&gt;  interaction. The principle is very simple: when your user loads the page, she is automatically added to a list of &amp;quot;listeners&amp;quot;. An independent thread is running: it listens for messages from Redis with the &lt;a href=&quot;http://code.google.com/p/redis/wiki/PublishSubscribe#SUBSCRIBE_channel_1_channel_2_&#8230;_channel_N&quot;&gt;subscribe&lt;/a&gt; command, and send a message through Websocket to every registered &amp;quot;listener&amp;quot;. In this example, the user can send a message to herself with a simple AJAX-powered form, which calls a view with a payload (the message), and the view publish it via the &lt;a href=&quot;http://code.google.com/p/redis/wiki/PublishSubscribe#PUBLISH_channel_message&quot;&gt;publish&lt;/a&gt; command of Redis.&lt;/p&gt;
 
@@ -1015,7 +1015,7 @@ to add this line to the &amp;#39;bin/activate&amp;#39; script of the correspondi
  <entry>
      <title>Python dynamic module loading</title>
      <link href="http://thomas.pelletier.im/2010/07/python-dynamic-module-loading"/>
-     <updated>2010-07-29T23:00:00Z</updated>
+     <updated>2010-07-29T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/07/python-dynamic-module-loading</id>
      <content type="html">&lt;p&gt;The following function allows you to load every Python modules contained in a folder. Useful to create plugins systems.&lt;/p&gt;
 
@@ -1026,7 +1026,7 @@ to add this line to the &amp;#39;bin/activate&amp;#39; script of the correspondi
  <entry>
      <title>Python dictionaries differences</title>
      <link href="http://thomas.pelletier.im/2010/07/python-dictionaries-differences"/>
-     <updated>2010-07-29T23:00:00Z</updated>
+     <updated>2010-07-29T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/07/python-dictionaries-differences</id>
      <content type="html">&lt;p&gt;Here is a simple function I wrote a week ago. It computes the differences between two dictionaries, and returns them as a list of tuples. I&amp;#39;m still not sure about its usefulness&#8230;&lt;/p&gt;
 
@@ -1037,7 +1037,7 @@ to add this line to the &amp;#39;bin/activate&amp;#39; script of the correspondi
  <entry>
      <title>Hg update hook</title>
      <link href="http://thomas.pelletier.im/2010/06/hg-update-hook"/>
-     <updated>2010-06-03T23:00:00Z</updated>
+     <updated>2010-06-03T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/06/hg-update-hook</id>
      <content type="html">&lt;p&gt;Note for myself : add the following to the .hg/hgrc file to automatically
 update the repo when a changeset is pushed:&lt;/p&gt;
@@ -1051,7 +1051,7 @@ update the repo when a changeset is pushed:&lt;/p&gt;
  <entry>
      <title>Virtualization as development tool</title>
      <link href="http://thomas.pelletier.im/2010/05/virtualization-as-development-tool"/>
-     <updated>2010-05-20T23:00:00Z</updated>
+     <updated>2010-05-20T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/05/virtualization-as-development-tool</id>
      <content type="html">&lt;p&gt;Okay, the title is not well choosen, that&amp;#39;s because my prefered one is too long for the blog layout: Linux Virtualization for a nicer development workplace.&lt;/p&gt;
 
@@ -1090,7 +1090,7 @@ Now that I&amp;#39;m sure you want to virtualize thousands of system, let take a
  <entry>
      <title>Gunicorn / Django Debian init script</title>
      <link href="http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script"/>
-     <updated>2010-05-08T23:00:00Z</updated>
+     <updated>2010-05-08T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/05/gunicorn-django-debian-init-script</id>
      <content type="html">&lt;p&gt;This is a simple Debian init.d script for my self-hosted Django/Gunicorn
 websites. Note that it runs inside a virtualenv (my installed Django versions
@@ -1171,7 +1171,7 @@ reload&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
  <entry>
      <title>FreeBSD : Static IP</title>
      <link href="http://thomas.pelletier.im/2010/05/freebsd-static-ip"/>
-     <updated>2010-05-07T23:00:00Z</updated>
+     <updated>2010-05-07T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/05/freebsd-static-ip</id>
      <content type="html">&lt;p&gt;This is a simple memorandum. In order to assign a static IP to a FreeBSD
 computer, just add the following to &lt;code&gt;/etc/rc.conf&lt;/code&gt;:&lt;/p&gt;
@@ -1185,7 +1185,7 @@ computer, just add the following to &lt;code&gt;/etc/rc.conf&lt;/code&gt;:&lt;/p
  <entry>
      <title>Ticky</title>
      <link href="http://thomas.pelletier.im/2010/04/ticky"/>
-     <updated>2010-04-13T23:00:00Z</updated>
+     <updated>2010-04-13T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/04/ticky</id>
      <content type="html">&lt;p&gt;I just release the first version of &lt;a href=&quot;http://ticky.im/&quot;&gt;Ticky&lt;/a&gt;, a free, simple
 and unobtrusive OS X application which helps you to manage your daily tasks.
@@ -1198,7 +1198,7 @@ application, I will probably write some posts on problems I have encountered.&lt
  <entry>
      <title>Use Markdown with Wordpress </title>
      <link href="http://thomas.pelletier.im/2010/03/use-markdown-with-wordpress"/>
-     <updated>2010-03-28T23:00:00Z</updated>
+     <updated>2010-03-28T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/03/use-markdown-with-wordpress</id>
      <content type="html">&lt;p&gt;By default, Wordpress only allows you to write your posts in HTML (in the case
 you have not noticed the built-in WYSIWYG editor creates and renders HTML).
@@ -1246,7 +1246,7 @@ since 2.0
  <entry>
      <title>Apple hypocrisy</title>
      <link href="http://thomas.pelletier.im/2010/02/apple-hypocrisy"/>
-     <updated>2010-02-23T00:00:00Z</updated>
+     <updated>2010-02-22T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/02/apple-hypocrisy</id>
      <content type="html">&lt;p&gt;I&amp;#39;m a regular reader of &lt;a href=&quot;http://techcrunch.com/&quot;&gt;TechCrunch&lt;/a&gt;. I&amp;#39;ve just read
 &amp;quot;&lt;a href=&quot;http://techcrunch.com/2010/02/23/apple-iphone-pornography-ban/&quot;&gt;Apple, There&amp;#39;s Pornography On My iPhone The App Is Called Safari. You made
@@ -1260,7 +1260,7 @@ concerning recent Apple&amp;#39;s decisions. I advise you to take a look at it.&
  <entry>
      <title>Test of distraction-less text editors on OS X</title>
      <link href="http://thomas.pelletier.im/2010/02/test-of-distraction-less-text-editors-on-os-x"/>
-     <updated>2010-02-22T00:00:00Z</updated>
+     <updated>2010-02-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/02/test-of-distraction-less-text-editors-on-os-x</id>
      <content type="html">&lt;p&gt;&lt;strong&gt;Note: If you think that I missed a really nice disctration-less text editor,
 or that one of my comment is groundless, feel free to drop me an email.&lt;/strong&gt;&lt;/p&gt;
@@ -1365,7 +1365,7 @@ of its look &amp;amp; feel. I also enjoy its ambiance songs! :)&lt;/p&gt;
  <entry>
      <title>Dijkstra&#8217;s algorithm Python implementation</title>
      <link href="http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation"/>
-     <updated>2010-02-15T00:00:00Z</updated>
+     <updated>2010-02-14T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/02/dijkstras-algorithm-python-implementation</id>
      <content type="html">&lt;p&gt;Here is my implementation of Dijkstra&amp;#39;s algorithm (also known as the shortest
 path) in Python. I wrote it for a project at school and put it there for memory
@@ -1468,7 +1468,7 @@ only.&lt;/p&gt;
  <entry>
      <title>Demi-finale au Prologin 2010</title>
      <link href="http://thomas.pelletier.im/2010/02/demi-finale-au-prologin-2010"/>
-     <updated>2010-02-13T00:00:00Z</updated>
+     <updated>2010-02-12T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/02/demi-finale-au-prologin-2010</id>
      <content type="html">&lt;h2 id=&quot;concernant-le-prologin&quot;&gt;Concernant le Prologin &lt;a href=&quot;#concernant-le-prologin&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Il s&amp;#39;agit d&amp;#39;un concours national français d&amp;#39;informatique mit en place en 1991
@@ -1588,7 +1588,7 @@ attention à la complexité de mes algorithmes !&lt;/p&gt;
  <entry>
      <title>Chrome vs Safari: my opinion</title>
      <link href="http://thomas.pelletier.im/2010/02/chrome-vs-safari-my-opinion"/>
-     <updated>2010-02-07T00:00:00Z</updated>
+     <updated>2010-02-06T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/02/chrome-vs-safari-my-opinion</id>
      <content type="html">&lt;p&gt;On my computer (MacbookPro), I have two browsers: one for web development and the other for the rest of my web activities. Firefox is definitely the best for my coding tasks, mainly because of its flexibility, its rank on the most used web browsers (please don&amp;#39;t ask me why I don&amp;#39;t want to use Internet Explorer) and numbers of insanely efficient extensions.
 Nevertheless, Firefox is, in my opinion, far to slow for my daily use. So the problem is: which browser for the rest? I wasn&amp;#39;t sure which one to use, especially between Safari and Google Chrome. But I finally decided: Chrome. Here is why.&lt;/p&gt;
@@ -1656,7 +1656,7 @@ Safari 4.0.4 (6531.21.10)&lt;/p&gt;
  <entry>
      <title>Writing articles with LaTeX</title>
      <link href="http://thomas.pelletier.im/2010/02/writing-articles-with-latex"/>
-     <updated>2010-02-04T00:00:00Z</updated>
+     <updated>2010-02-03T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/02/writing-articles-with-latex</id>
      <content type="html">&lt;p&gt;I had to write a quite short article for school a few weeks ago. I&amp;#39;m used to
 write my homework with Apple&amp;#39;s Pages, with always the same template I&amp;#39;ve built
@@ -1698,7 +1698,7 @@ problem!&lt;/p&gt;
  <entry>
      <title>Simple mail server report</title>
      <link href="http://thomas.pelletier.im/2010/01/simple-mail-server-report"/>
-     <updated>2010-01-21T00:00:00Z</updated>
+     <updated>2010-01-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/01/simple-mail-server-report</id>
      <content type="html">&lt;p&gt;Here is a small script I wrote a few minutes ago. It gather some informations
 from the local machine and send them by email to the administrator (me).
@@ -1743,7 +1743,7 @@ rm &lt;span class=&quot;nv&quot;&gt;$MSG&lt;/span&gt;
  <entry>
      <title>About Apple&#8217;s Magic Mouse</title>
      <link href="http://thomas.pelletier.im/2010/01/about-apples-magic-mouse"/>
-     <updated>2010-01-21T00:00:00Z</updated>
+     <updated>2010-01-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/01/about-apples-magic-mouse</id>
      <content type="html">&lt;p&gt;In short: wow!&lt;/p&gt;
 
@@ -1802,7 +1802,7 @@ A nice purchase in my humble opinion.&lt;/p&gt;
  <entry>
      <title>Quicksort C++ implementation</title>
      <link href="http://thomas.pelletier.im/2010/01/quicksort-c-implementation"/>
-     <updated>2010-01-19T00:00:00Z</updated>
+     <updated>2010-01-18T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/01/quicksort-c-implementation</id>
      <content type="html">&lt;p&gt;Hello. I just had to implement a quicksort algorithm version in C++ for an exercise. Here is what I&amp;#39;ve done:&lt;/p&gt;
 
@@ -1862,7 +1862,7 @@ A nice purchase in my humble opinion.&lt;/p&gt;
  <entry>
      <title>Time Machine, FreeBSD and AFP are on a little boat</title>
      <link href="http://thomas.pelletier.im/2010/01/time-machine-freebsd-and-afp-are-on-a-little-boat"/>
-     <updated>2010-01-11T00:00:00Z</updated>
+     <updated>2010-01-10T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2010/01/time-machine-freebsd-and-afp-are-on-a-little-boat</id>
      <content type="html">&lt;p&gt;&lt;strong&gt;Warning: This post is outdated! Here is a &lt;a href=&quot;http://thomas.pelletier.im/2012/01/freebsd-afp-timemachine-updated/&quot;&gt;newer
 version&lt;/a&gt;.&lt;/strong&gt;&lt;/p&gt;
@@ -1965,7 +1965,7 @@ FreeBSD drive and you&amp;#39;re done.&lt;/p&gt;
  <entry>
      <title>Test your django-piston API (with auth)</title>
      <link href="http://thomas.pelletier.im/2009/12/test-your-django-piston-api-with-auth"/>
-     <updated>2009-12-17T00:00:00Z</updated>
+     <updated>2009-12-16T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/12/test-your-django-piston-api-with-auth</id>
      <content type="html">&lt;p&gt;I have to build the API for one of my web service. It is Django and
 django-piston powered application and it works well. Okay. I chose the &lt;a href=&quot;http://en.wikipedia.org/wiki/Test_Driven_Development&quot;&gt;TDD
@@ -2009,7 +2009,7 @@ need authentication:&lt;/p&gt;
  <entry>
      <title>Sync Google Contacts and AddressBook.app</title>
      <link href="http://thomas.pelletier.im/2009/12/sync-google-contacts-and-addressbook-app"/>
-     <updated>2009-12-07T00:00:00Z</updated>
+     <updated>2009-12-06T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/12/sync-google-contacts-and-addressbook-app</id>
      <content type="html">&lt;p&gt;You may be aware of some limitations you may encounter to sync your Google
 Contacts with your built-in Mac OS X address book, especially if you don&amp;#39;t have
@@ -2045,7 +2045,7 @@ script which will be executed hourly (Note: this part uses the notion of
  <entry>
      <title>Mint for fresher statistics</title>
      <link href="http://thomas.pelletier.im/2009/11/mint-for-fresher-statistics"/>
-     <updated>2009-11-10T00:00:00Z</updated>
+     <updated>2009-11-09T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/11/mint-for-fresher-statistics</id>
      <content type="html">&lt;p&gt;&lt;img class=&quot;aligncenter size-full wp-image-429&quot; title=&quot;mint&quot; src=&quot;http://thomas.pelletier.im/wp-content/uploads/2009/11/mint.jpg&quot; alt=&quot;mint&quot; /&gt;&lt;/p&gt;
 
@@ -2074,7 +2074,7 @@ To put it in a nutshell, Mint is really awesome and I don&amp;#39;t regret buyin
  <entry>
      <title>Hey, I speak English too!</title>
      <link href="http://thomas.pelletier.im/2009/11/hey-i-speak-english-too"/>
-     <updated>2009-11-06T00:00:00Z</updated>
+     <updated>2009-11-05T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/11/hey-i-speak-english-too</id>
      <content type="html">&lt;p style=&quot;text-align: right;&quot;&gt;&lt;img class=&quot;aligncenter size-full wp-image-397&quot; title=&quot;English&quot; src=&quot;http://thomas.pelletier.im/wp-content/uploads/2009/11/english.jpg&quot; alt=&quot;English&quot; width=&quot;700&quot; height=&quot;200&quot; /&gt;*Photo credits: &lt;a href=&quot;http://www.flickr.com/photos/59957789@N00/369389019/&quot;&gt;London Symbols&lt;/a&gt; by &lt;a href=&quot;http://www.flickr.com/people/59957789@N00/&quot;&gt;X it&lt;/a&gt;*&lt;/p&gt;
 
@@ -2089,7 +2089,7 @@ To put it in a nutshell, Mint is really awesome and I don&amp;#39;t regret buyin
  <entry>
      <title>Mercurial : Publier sur plusieurs dÃ©pÃ´ts</title>
      <link href="http://thomas.pelletier.im/2009/10/mercurial-publier-sur-plusieurs-depots"/>
-     <updated>2009-10-22T23:00:00Z</updated>
+     <updated>2009-10-22T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/10/mercurial-publier-sur-plusieurs-depots</id>
      <content type="html">&lt;h2 id=&quot;le-problme&quot;&gt;Le problème &lt;a href=&quot;#le-problme&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Vous avez plusieurs dépôts Mercurial, en général un principal et un miroir
@@ -2145,7 +2145,7 @@ pouvez !&lt;/p&gt;
  <entry>
      <title>FreeBSD : serveur DNS Bind9</title>
      <link href="http://thomas.pelletier.im/2009/10/freebsd-serveur-dns-bind9"/>
-     <updated>2009-10-11T23:00:00Z</updated>
+     <updated>2009-10-11T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/10/freebsd-serveur-dns-bind9</id>
      <content type="html">&lt;p&gt;&lt;em&gt;Je pars ici sur le fait que vous avez d&amp;#39;une part, les bases d&amp;#39;utilisation
 d&amp;#39;une &lt;a href=&quot;http://www.freebsd.org/fr/&quot;&gt;FreeBSD&lt;/a&gt; (ou de n&amp;#39;importe quelle autre BSD,
@@ -2348,7 +2348,7 @@ votre DNS !&lt;/p&gt;
  <entry>
      <title>FreeBSD : Serveur Mail</title>
      <link href="http://thomas.pelletier.im/2009/10/freebsd-serveur-mail"/>
-     <updated>2009-10-10T23:00:00Z</updated>
+     <updated>2009-10-10T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/10/freebsd-serveur-mail</id>
      <content type="html">&lt;p&gt;Je viens de trouver un excellent howto (en anglais) concernant la mise en place d&amp;#39;un serveur mail complet (IMAP/SMTP/webmail/antispam/antivirus) avec FreeBSD.&lt;/p&gt;
 
@@ -2360,7 +2360,7 @@ votre DNS !&lt;/p&gt;
  <entry>
      <title>FreeBSD, Ã§a le fait</title>
      <link href="http://thomas.pelletier.im/2009/10/freebsd-ca-le-fait"/>
-     <updated>2009-10-04T23:00:00Z</updated>
+     <updated>2009-10-04T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/10/freebsd-ca-le-fait</id>
      <content type="html">&lt;p&gt;Un petit message rapide pour annoncer deux choses :
 &lt;ol&gt;
@@ -2373,7 +2373,7 @@ votre DNS !&lt;/p&gt;
  <entry>
      <title>Installation de FreeBSD</title>
      <link href="http://thomas.pelletier.im/2009/09/installation-de-freebsd"/>
-     <updated>2009-09-25T23:00:00Z</updated>
+     <updated>2009-09-25T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/09/installation-de-freebsd</id>
      <content type="html">&lt;p&gt;J&amp;#39;ai enfin récupéré une machine pour me servir de serveur. J&amp;#39;aime bien Debian comme système pour serveur, cependant je veux essayer quelque chose de nouveau : FreeBSD. J&amp;#39;entend souvent que cette branche de BSD est très stable et performante. A tester donc !&lt;/p&gt;
 
@@ -2398,7 +2398,7 @@ votre DNS !&lt;/p&gt;
  <entry>
      <title>Ãcrire des maths sous Mac</title>
      <link href="http://thomas.pelletier.im/2009/09/ecrire-des-maths-sous-mac"/>
-     <updated>2009-09-17T23:00:00Z</updated>
+     <updated>2009-09-17T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/09/ecrire-des-maths-sous-mac</id>
      <content type="html">&lt;p&gt;Il y a quelques jours, j&amp;#39;ai du trouver un moyen d&amp;#39;écrire du texte mathématique
 avec mon Mac. Après plusieurs recherches et essais, voici la solution que j&amp;#39;ai
@@ -2479,7 +2479,7 @@ fou au cours de la frappe.&lt;/p&gt;
  <entry>
      <title>Snow Leopard</title>
      <link href="http://thomas.pelletier.im/2009/09/snow-leopard"/>
-     <updated>2009-09-02T23:00:00Z</updated>
+     <updated>2009-09-02T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/09/snow-leopard</id>
      <content type="html">&lt;p&gt;&lt;em&gt;J&amp;#39;ai beaucoup de retard concernant un bon peu d&amp;#39;article à écrire ici. Je suis
 cependant limité par le temps. J&amp;#39;écris donc ce que je peux, quand je peux. Ne
@@ -2637,22 +2637,22 @@ virtualenv==dev&lt;/code&gt;&lt;/p&gt;
  <entry>
      <title>Premier contact avec le spam sur kiznet.fr</title>
      <link href="http://thomas.pelletier.im/2009/07/premier-contact-avec-le-spam-sur-kiznet-fr"/>
-     <updated>2009-07-13T23:00:00Z</updated>
+     <updated>2009-07-13T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/07/premier-contact-avec-le-spam-sur-kiznet-fr</id>
-     <content type="html">&lt;p&gt;Jusqu&#39;à maintenant, je n&#39;avais jamais eu de soucis avec le spam sur kiznet.fr, et je ne m&#39;en plaignait pas.
+     <content type="html">&lt;p&gt;Jusqu&#8217;à maintenant, je n&#8217;avais jamais eu de soucis avec le spam sur kiznet.fr, et je ne m&#8217;en plaignait pas.
 Et là, il y a trois jours, tout à commencé : environ 1 000 spams en commentaires par jour.
-J&#39;ai d&#39;abord mit en place &lt;a class=&quot;reference external&quot; href=&quot;http://sciyoshi.com/blog/2008/aug/27/using-akismet-djangos-new-comments-framework/&quot;&gt;Akismet pour Django&lt;/a&gt; (avec quelques bidouilles). Le spam est passé de 1 100 à 900. Moins pire, mais c&#39;est pas la joie.
-J&#39;ai alors fait ce que je m&#39;étais juré de ne jamais faire (et j&#39;ai encore mal, je vous l&#39;assure) : j&#39;ai mit en place un &lt;a class=&quot;reference external&quot; href=&quot;http://fr.wikipedia.org/wiki/Captcha&quot;&gt;captcha&lt;/a&gt; (en l&#39;occurrence, &lt;a class=&quot;reference external&quot; href=&quot;http://recaptcha.net/&quot;&gt;reCAPTCHA&lt;/a&gt;). J&#39;ai honte, mais au moins, ça fait moins mal.
-Outre le défi psychologique personnel qu&#39;à représenté la mise en place du captcha, je me suis heurté aussi à un soucis technique : tous les snippets que j&#39;ai trouvé concernant reCAPTCHA n&#39;ont servi à rien ! Ils sont tous soit incomplet (tout le code n&#39;est pas fournit) soit dépassé (&lt;a class=&quot;reference external&quot; href=&quot;http://www.djangoproject.com/&quot;&gt;Django&lt;/a&gt; évolue). J&#39;ai donc mit la main à la pâte et j&#39;ai codé ma propre application (d&#39;une manière pas très élégante, mais pour se point précis, je trouve que Django n&#39;offre pas une assez grande souplesse. A l&#39;occasion, j&#39;essayerais de voir si je ne peux pas écrire un patch), que je rendrais disponible sur &lt;a class=&quot;reference external&quot; href=&quot;http://bitbucket.org/Kizlum/&quot;&gt;mon bitbucket&lt;/a&gt;.&lt;/p&gt;
+J&#8217;ai d&#8217;abord mit en place &lt;a class=&quot;reference external&quot; href=&quot;http://sciyoshi.com/blog/2008/aug/27/using-akismet-djangos-new-comments-framework/&quot;&gt;Akismet pour Django&lt;/a&gt; (avec quelques bidouilles). Le spam est passé de 1 100 à 900. Moins pire, mais c&#8217;est pas la joie.
+J&#8217;ai alors fait ce que je m&#8217;étais juré de ne jamais faire (et j&#8217;ai encore mal, je vous l&#8217;assure) : j&#8217;ai mit en place un &lt;a class=&quot;reference external&quot; href=&quot;http://fr.wikipedia.org/wiki/Captcha&quot;&gt;captcha&lt;/a&gt; (en l&#8217;occurrence, &lt;a class=&quot;reference external&quot; href=&quot;http://recaptcha.net/&quot;&gt;reCAPTCHA&lt;/a&gt;). J&#8217;ai honte, mais au moins, ça fait moins mal.
+Outre le défi psychologique personnel qu&#8217;à représenté la mise en place du captcha, je me suis heurté aussi à un soucis technique : tous les snippets que j&#8217;ai trouvé concernant reCAPTCHA n&#8217;ont servi à rien ! Ils sont tous soit incomplet (tout le code n&#8217;est pas fournit) soit dépassé (&lt;a class=&quot;reference external&quot; href=&quot;http://www.djangoproject.com/&quot;&gt;Django&lt;/a&gt; évolue). J&#8217;ai donc mit la main à la pâte et j&#8217;ai codé ma propre application (d&#8217;une manière pas très élégante, mais pour se point précis, je trouve que Django n&#8217;offre pas une assez grande souplesse. A l&#8217;occasion, j&#8217;essayerais de voir si je ne peux pas écrire un patch), que je rendrais disponible sur &lt;a class=&quot;reference external&quot; href=&quot;http://bitbucket.org/Kizlum/&quot;&gt;mon bitbucket&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Au passage, le  site n&#39;a pas été disponible aujourd&#39;hui de 18h40 à 18h45 : petit soucis de la part d&#39;Alwaysdata, mais qui, heureusement et comme toujours, ont maîtrisé la situation.&lt;/p&gt;
+&lt;p&gt;Au passage, le  site n&#8217;a pas été disponible aujourd&#8217;hui de 18h40 à 18h45 : petit soucis de la part d&#8217;Alwaysdata, mais qui, heureusement et comme toujours, ont maîtrisé la situation.&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
      <title>Déplacer des mails selon un critère donné dans une architecture Mailbox</title>
      <link href="http://thomas.pelletier.im/2009/06/deplacer-des-mails-selon-un-critere-donne-dans-une-architecture-mailbox"/>
-     <updated>2009-06-16T23:00:00Z</updated>
+     <updated>2009-06-16T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/06/deplacer-des-mails-selon-un-critere-donne-dans-une-architecture-mailbox</id>
      <content type="html">&lt;p&gt;Aujourd&amp;#39;hui, j&amp;#39;ai décidé d&amp;#39;utiliser les services de &lt;a href=&quot;http://www.alwaysdata.com/&quot;&gt;mon
 hébergeur&lt;/a&gt; afin de gérer mes mails.  Le switch se
@@ -2704,7 +2704,7 @@ Bonne journée.&lt;/p&gt;
  <entry>
      <title>PrÃ©sentation de gOS</title>
      <link href="http://thomas.pelletier.im/2009/06/presentation-de-gos"/>
-     <updated>2009-06-13T23:00:00Z</updated>
+     <updated>2009-06-13T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/06/presentation-de-gos</id>
      <content type="html">&lt;p&gt;Début 2007 environ, une société basée à la Silicon Valley et à Taiwan se met
 à développer le système d&amp;#39;exploitation gOS. Cette société a pour nom Good OS.
@@ -2734,7 +2734,7 @@ laissé déçu de ce système.&lt;/p&gt;
  <entry>
      <title>Adresse IP locale statique sous Debian</title>
      <link href="http://thomas.pelletier.im/2009/05/adresse-ip-locale-statique-sous-debian"/>
-     <updated>2009-05-21T23:00:00Z</updated>
+     <updated>2009-05-21T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/05/adresse-ip-locale-statique-sous-debian</id>
      <content type="html">&lt;p&gt;Pré requis :&lt;/p&gt;
 
@@ -2775,7 +2775,7 @@ avez sauvegardé dans l&amp;#39;étape 1)&lt;/li&gt;
  <entry>
      <title>Installer Sphinx sous Ubuntu</title>
      <link href="http://thomas.pelletier.im/2009/05/installer-sphinx-sous-ubuntu"/>
-     <updated>2009-05-18T23:00:00Z</updated>
+     <updated>2009-05-18T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/05/installer-sphinx-sous-ubuntu</id>
      <content type="html">&lt;p&gt;Voila la petite astuce pour installer sans encombre
 &lt;a href=&quot;http://sphinx.pocoo.org/&quot;&gt;Sphinx&lt;/a&gt; (le générateur de documentation Python) sous
@@ -2797,27 +2797,27 @@ pour installer directement Sphinx :&lt;/p&gt;
  <entry>
      <title>Lightsearch</title>
      <link href="http://thomas.pelletier.im/2009/05/lightsearch"/>
-     <updated>2009-05-09T23:00:00Z</updated>
+     <updated>2009-05-09T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/05/lightsearch</id>
-     <content type="html">&lt;p&gt;Bonjour. Il y a deux jours, j&#39;ai trouvé que ce blog manque cruellement d&#39;une
-fonction de recherche. J&#39;ai donc fait un rapide tour des applications de
-recherche déjà existantes pour Django. J&#39;en ai retenu trois :&lt;/p&gt;
+     <content type="html">&lt;p&gt;Bonjour. Il y a deux jours, j&#8217;ai trouvé que ce blog manque cruellement d&#8217;une
+fonction de recherche. J&#8217;ai donc fait un rapide tour des applications de
+recherche déjà existantes pour Django. J&#8217;en ai retenu trois :&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;ul class=&quot;simple&quot;&gt;
-&lt;li&gt;&lt;a class=&quot;reference external&quot; href=&quot;http://code.google.com/p/djangosearch/&quot;&gt;djangosearch&lt;/a&gt;, qui n&#39;est malheureusement plus en développement.&lt;/li&gt;
+&lt;li&gt;&lt;a class=&quot;reference external&quot; href=&quot;http://code.google.com/p/djangosearch/&quot;&gt;djangosearch&lt;/a&gt;, qui n&#8217;est malheureusement plus en développement.&lt;/li&gt;
 &lt;li&gt;&lt;a class=&quot;reference external&quot; href=&quot;http://haystacksearch.org/&quot;&gt;Haystack&lt;/a&gt;, qui est une vraie machine à gaz à mon sens (et beaucoup trop lourd pour un simple blog).&lt;/li&gt;
 
 &lt;li&gt;&lt;a class=&quot;reference external&quot; href=&quot;http://info.wsisiz.edu.pl/~blizinsk/simple-django-search.html&quot;&gt;Divers snippets&lt;/a&gt;, soit trop simplets, soit qui ne marche pas (compatibilité avec Django 1.x par exemple), bref : rien qui ne me va.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;Une conclusion s&#39;imposait : développer ma propre application de recherche. Je
+&lt;p&gt;Une conclusion s&#8217;imposait : développer ma propre application de recherche. Je
 vous présente donc &lt;a class=&quot;reference external&quot; href=&quot;http://bitbucket.org/Kizlum/django-lightsearch/&quot;&gt;Lightsearch&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Le but de cette application est de fournir un moyen simple d&#39;effectuer des
+&lt;p&gt;Le but de cette application est de fournir un moyen simple d&#8217;effectuer des
 recherches simples. Si vous cherchez de hautes performances et une liste de
-fonctionnalités imposante, vous pouvez passer votre chemin. Ce n&#39;est
+fonctionnalités imposante, vous pouvez passer votre chemin. Ce n&#8217;est
 absolument pas le but de cette application.&lt;/p&gt;
 
 &lt;p&gt;Si vous souhaitez jeter un oeil, approfondir le sujet ou filer un coup de
@@ -2830,7 +2830,7 @@ main, rendez-vous sur &lt;a class=&quot;reference external&quot; href=&quot;http
  <entry>
      <title>Prochaine version de Kiznet en prÃ©paration</title>
      <link href="http://thomas.pelletier.im/2009/04/prochaine-version-de-kiznet-en-preparation"/>
-     <updated>2009-04-25T23:00:00Z</updated>
+     <updated>2009-04-25T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/04/prochaine-version-de-kiznet-en-preparation</id>
      <content type="html">&lt;p&gt;Voilà, je l&amp;#39;avais déjà annoncé, mais maintenant c&amp;#39;est partit : je vais
 développer la prochaine version de Kiznet (à vitesse tortue boiteuse : études
@@ -2863,7 +2863,7 @@ blog, n&amp;#39;hésitez pas à les communiquer en commentaire !&lt;/p&gt;
  <entry>
      <title>Installation de Debian Lenny (minimal)</title>
      <link href="http://thomas.pelletier.im/2009/04/installation-de-debian-lenny-minimal"/>
-     <updated>2009-04-25T23:00:00Z</updated>
+     <updated>2009-04-25T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/04/installation-de-debian-lenny-minimal</id>
      <content type="html">&lt;p&gt;Pour des raisons de tests, je dois installer une Debian sur une machine virtuelle. Même si je l&amp;#39;ai souvent fait, je vais profiter de l&amp;#39;occasion pour l&amp;#39;expliquer ici, dans l&amp;#39;espoir que cela servira un jours à quelqu&amp;#39;un.&lt;/p&gt;
 
@@ -3023,7 +3023,7 @@ l&amp;#39;écran suivant :&lt;/p&gt;
  <entry>
      <title>Progression de LifeDo</title>
      <link href="http://thomas.pelletier.im/2009/04/progression-de-lifedo"/>
-     <updated>2009-04-24T23:00:00Z</updated>
+     <updated>2009-04-24T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/04/progression-de-lifedo</id>
      <content type="html">&lt;p&gt;Voilà, c&amp;#39;est juste pour annoncer que sous peu je vais pouvoir lancer une mise
 à jour majeur de LifeDo (elle a beau être majeur, elle n&amp;#39;est pas pour autant
@@ -3046,7 +3046,7 @@ tour quand mes dépôts bitbucket seront pleins !&lt;/p&gt;
  <entry>
      <title>Quelques infos</title>
      <link href="http://thomas.pelletier.im/2009/04/quelques-infos"/>
-     <updated>2009-04-17T23:00:00Z</updated>
+     <updated>2009-04-17T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/04/quelques-infos</id>
      <content type="html">&lt;p&gt;Bon, c&amp;#39;est pas vraiment utilie pour la plupart des gens mais bon.&lt;/p&gt;
 
@@ -3070,7 +3070,7 @@ ce blog. Encore des choix en perspective !&lt;/p&gt;
  <entry>
      <title>LifeDo : nouvelle version</title>
      <link href="http://thomas.pelletier.im/2009/04/lifedo-nouvelle-version"/>
-     <updated>2009-04-12T23:00:00Z</updated>
+     <updated>2009-04-12T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/04/lifedo-nouvelle-version</id>
      <content type="html">&lt;p&gt;Nouvelle version de LifeDo disponnible. J&amp;#39;en dis pas plus : je vous laisse
 découvrir par vous même.&lt;/p&gt;
@@ -3082,7 +3082,7 @@ découvrir par vous même.&lt;/p&gt;
  <entry>
      <title>Ãparpillement des technologies</title>
      <link href="http://thomas.pelletier.im/2009/04/eparpillement-des-technologies"/>
-     <updated>2009-04-05T23:00:00Z</updated>
+     <updated>2009-04-05T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/04/eparpillement-des-technologies</id>
      <content type="html">&lt;p&gt;Je me rends compte aujourd&amp;#39;hui de l&amp;#39;immense panel de technologie informatique à notre disposition. Pour ma part, j&amp;#39;en utilise assez peu :&lt;/p&gt;
 
@@ -3114,7 +3114,7 @@ sujet. A voir.&lt;/p&gt;
  <entry>
      <title>Panne du serveur</title>
      <link href="http://thomas.pelletier.im/2009/03/panne-du-serveur"/>
-     <updated>2009-03-29T23:00:00Z</updated>
+     <updated>2009-03-29T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/panne-du-serveur</id>
      <content type="html">&lt;p&gt;Problème cette après-midi : le serveur n&amp;#39;a pas trouvé mieux que de dégager une légère bouffée de fumée à l&amp;#39;allumage. Je cherche à voir la pièce défectueuse en espérant que ce ne soit pas un composant que je n&amp;#39;ai pas sous la main. Il n&amp;#39;y aura donc pas d&amp;#39;autre howto pour serveur d&amp;#39;ici là.&lt;/p&gt;
 
@@ -3125,7 +3125,7 @@ sujet. A voir.&lt;/p&gt;
  <entry>
      <title>WakeOnLan sur un serveur Debian</title>
      <link href="http://thomas.pelletier.im/2009/03/wakeonlan-sur-un-serveur-debian"/>
-     <updated>2009-03-29T00:00:00Z</updated>
+     <updated>2009-03-28T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/wakeonlan-sur-un-serveur-debian</id>
      <content type="html">&lt;p&gt;Continuation des articles sur la mise en place d&amp;#39;un serveur Debian.&lt;/p&gt;
 
@@ -3186,7 +3186,7 @@ WOL de votre choix (j&amp;#39;utilise wakeonlan sous Ubuntu) pour allumer votre 
  <entry>
      <title>Récit : installation d&#8217;une Debian pour un serveur</title>
      <link href="http://thomas.pelletier.im/2009/03/recit-installation-dune-debian-pour-un-serveur"/>
-     <updated>2009-03-29T00:00:00Z</updated>
+     <updated>2009-03-28T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/recit-installation-dune-debian-pour-un-serveur</id>
      <content type="html">&lt;p&gt;Bien, je vais ici raconter ma petite histoire d&amp;#39;installation d&amp;#39;un serveur
 perso. Pour être plus précis, de l&amp;#39;installation d&amp;#39;un système de base Debian,
@@ -3267,7 +3267,7 @@ services à mettre en place.&lt;/p&gt;
  <entry>
      <title>Installation d&#8217;un serveur SSH sous Debian</title>
      <link href="http://thomas.pelletier.im/2009/03/installation-dun-serveur-ssh-sous-debian"/>
-     <updated>2009-03-29T00:00:00Z</updated>
+     <updated>2009-03-28T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/installation-dun-serveur-ssh-sous-debian</id>
      <content type="html">&lt;p&gt;Voilà le premier article qui fait suite à celui du &lt;a href=&quot;http://kizlum.wordpress.com/2009/03/29/recit-installation-dune-debian-pour-un-serveur/&quot;&gt;récit de l&amp;#39;installation du
 système de base
@@ -3315,7 +3315,7 @@ Une fois que vous avez fait mémoriser à votre client la passphrase avec ssh-ad
  <entry>
      <title>Surprise</title>
      <link href="http://thomas.pelletier.im/2009/03/surprise"/>
-     <updated>2009-03-25T00:00:00Z</updated>
+     <updated>2009-03-24T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/surprise</id>
      <content type="html">&lt;p&gt;Je viens de voir qu&amp;#39;&lt;a href=&quot;http://pvergain.wordpress.com/2009/02/08/quelques-articles-sur-des-frameworks-web-python-django-pylons-web2py-repozebfg-pyxer/&quot;&gt;au moins une
 personne&lt;/a&gt;
@@ -3333,7 +3333,7 @@ peu de chance, cela se reproduira.&lt;/p&gt;
  <entry>
      <title>IndisponibilitÃ©</title>
      <link href="http://thomas.pelletier.im/2009/03/indisponibilite"/>
-     <updated>2009-03-05T00:00:00Z</updated>
+     <updated>2009-03-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/indisponibilite</id>
      <content type="html">&lt;p&gt;Kiznet.fr a été indisponible durant environ 48h. Je m&amp;#39;en excuse platement. Il
 s&amp;#39;agit là d&amp;#39;une erreur humaine (double enregistrement DNS) qui a provoquée une
@@ -3344,7 +3344,7 @@ zone DNS erronée. Tout est dans l&amp;#39;ordre.&lt;/p&gt;
  <entry>
      <title>Retour</title>
      <link href="http://thomas.pelletier.im/2009/03/retour"/>
-     <updated>2009-03-01T00:00:00Z</updated>
+     <updated>2009-02-28T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/03/retour</id>
      <content type="html">&lt;p&gt;Bon. Enfin, le ventirad est arrivé vite (36 heures environ, merci
 &lt;a href=&quot;http://www.ldlc.com/&quot;&gt;LDLC&lt;/a&gt;)et correctement installé (oui, parce que quand il
@@ -3386,7 +3386,7 @@ payer 1 abonnement, alors plusieurs, même pas la peine &#8230;).&lt;/p&gt;
  <entry>
      <title>InactivitÃ© forcÃ©e</title>
      <link href="http://thomas.pelletier.im/2009/02/inactivite-forcee"/>
-     <updated>2009-02-23T00:00:00Z</updated>
+     <updated>2009-02-22T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/02/inactivite-forcee</id>
      <content type="html">&lt;p&gt;Suite à la cassure de mon ventirad, il m&amp;#39;est temporairement impossible de
 continuer à poster et à faire avancer mes divers projets. Néanmoins, la
@@ -3404,7 +3404,7 @@ je vais aller faire mes petites bidouilles là dessus.&lt;/p&gt;
  <entry>
      <title>DNS Alwaysdata</title>
      <link href="http://thomas.pelletier.im/2009/02/dns-alwaysdata"/>
-     <updated>2009-02-22T00:00:00Z</updated>
+     <updated>2009-02-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/02/dns-alwaysdata</id>
      <content type="html">&lt;p&gt;Je suis en train de faire passer kiznet.fr vers les serveurs Alwaysdata. S&amp;#39;en
 suivent des modifications de DNS. Même si je fais mon possible pour l&amp;#39;éviter,
@@ -3416,7 +3416,7 @@ comportement anormal, merci de m&amp;#39;envoyer un mail.&lt;/p&gt;
  <entry>
      <title>Pauvres traducteurs</title>
      <link href="http://thomas.pelletier.im/2009/02/pauvres-traducteurs"/>
-     <updated>2009-02-06T00:00:00Z</updated>
+     <updated>2009-02-05T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/02/pauvres-traducteurs</id>
      <content type="html">&lt;p&gt;is très satisfait du produit (mal grès le fait que le firmware fournit est immonde et qu&amp;#39;il faut le flasher d&amp;#39;urgence, rien que pour le rendre compatible avec Vista). Les débits sont bons, les paramètres sont étendus, tout va bien.&lt;/p&gt;
 
@@ -3433,7 +3433,7 @@ comportement anormal, merci de m&amp;#39;envoyer un mail.&lt;/p&gt;
  <entry>
      <title>Bug Google</title>
      <link href="http://thomas.pelletier.im/2009/02/bug-google"/>
-     <updated>2009-02-01T00:00:00Z</updated>
+     <updated>2009-01-31T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/02/bug-google</id>
      <content type="html">&lt;p&gt;Si vous avez fait une recherche Google hier (Samedi 31 Janvier) aux alentours de 16h, comme moi, vous avez du vous rendre compte de l&amp;#39;énorme problème du moteur de recherche. En effet, pour ceux qui ne seraient pas au courant, le moteur classait tous les sites comme &amp;quot;pouvant endommager votre ordinateur&amp;quot;.&lt;/p&gt;
 
@@ -3485,7 +3485,7 @@ importants du billet de Google :&lt;/p&gt;
  <entry>
      <title>DÃ©pÃ´t mercurial pour Djangoproject</title>
      <link href="http://thomas.pelletier.im/2009/01/depot-mercurial-pour-djangoproject"/>
-     <updated>2009-01-20T00:00:00Z</updated>
+     <updated>2009-01-19T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/01/depot-mercurial-pour-djangoproject</id>
      <content type="html">&lt;p&gt;Je viens de tomber &lt;a href=&quot;http://www.bitbucket.org/repo/all/&quot;&gt;par hasard&lt;/a&gt; sur un
 dépôt &lt;a href=&quot;http://www.bitbucket.org/repo/all/&quot;&gt;mercurial&lt;/a&gt; semblant être
@@ -3500,7 +3500,7 @@ vérifier.&lt;/p&gt;
  <entry>
      <title>Baisse de rÃ©gime</title>
      <link href="http://thomas.pelletier.im/2009/01/baisse-de-regime"/>
-     <updated>2009-01-05T00:00:00Z</updated>
+     <updated>2009-01-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2009/01/baisse-de-regime</id>
      <content type="html">&lt;p&gt;Afin de favoriser mes études, je vais diminuer le temps que je passe à faire
 de l&amp;#39;informatique, car il me semble plus important de pouvoir entrer dans
@@ -3521,7 +3521,7 @@ message d&amp;#39;attente pendant quelques temps. Sur ce, a la prochaine !&lt;/p
  <entry>
      <title>Django, on s&#8217;y fait vite</title>
      <link href="http://thomas.pelletier.im/2008/12/django-on-sy-fait-vite"/>
-     <updated>2008-12-29T00:00:00Z</updated>
+     <updated>2008-12-28T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/12/django-on-sy-fait-vite</id>
      <content type="html">&lt;p&gt;Je dois programmer un module pour &lt;a href=&quot;http://www.joomla.org/&quot;&gt;Joomla!&lt;/a&gt;
 devant créer un carrousel 3D à partir d&amp;#39;albums photos (il faut aussi que je
@@ -3545,7 +3545,7 @@ fanatiques de Joomla!)&lt;/p&gt;
  <entry>
      <title>Trop d&#8217;idÃ©es nuisent gravement Ã  la santÃ©</title>
      <link href="http://thomas.pelletier.im/2008/12/trop-didees-nuisent-gravement-a-la-sante"/>
-     <updated>2008-12-16T00:00:00Z</updated>
+     <updated>2008-12-15T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/12/trop-didees-nuisent-gravement-a-la-sante</id>
      <content type="html">&lt;p&gt;Un petit message rapide pour parler d&amp;#39;un truc qui me semble de plus en plus
 vrai (me concernant). Vous n&amp;#39;avez jamais eu tellement d&amp;#39;idées que vous
@@ -3559,7 +3559,7 @@ genre. Va falloir que j&amp;#39;y prête plus d&amp;#39;attention pour réguler 
  <entry>
      <title>Framework de commentaires de Django</title>
      <link href="http://thomas.pelletier.im/2008/12/framework-de-commentaires-de-django"/>
-     <updated>2008-12-08T00:00:00Z</updated>
+     <updated>2008-12-07T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/12/framework-de-commentaires-de-django</id>
      <content type="html">&lt;p&gt;Je viens de découvrir (grâce à un &lt;a href=&quot;http://groups.google.com/group/django-developers/browse_thread/thread/ff23d12b0c167cbb?hl=en&quot;&gt;message sur la liste de diffusion pour
 développeurs&lt;/a&gt;)
@@ -3576,7 +3576,7 @@ site&lt;/a&gt; par la même occasion.&lt;/p&gt;
  <entry>
      <title>Flash Player 10</title>
      <link href="http://thomas.pelletier.im/2008/11/flash-player-10"/>
-     <updated>2008-11-25T00:00:00Z</updated>
+     <updated>2008-11-24T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/flash-player-10</id>
      <content type="html">&lt;p&gt;Bonjours à tous. Je vais expliquer ici l&amp;#39;installation d&amp;#39;&lt;a href=&quot;http://labs.adobe.com/technologies/flashplayer10/&quot;&gt;Adobe Flash Player 10
 release candidate&lt;/a&gt; (nom de
@@ -3605,7 +3605,7 @@ notes&lt;/a&gt;.&lt;/p&gt;
  <entry>
      <title>Nouvelle version !</title>
      <link href="http://thomas.pelletier.im/2008/11/nouvelle-version"/>
-     <updated>2008-11-23T00:00:00Z</updated>
+     <updated>2008-11-22T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/nouvelle-version</id>
      <content type="html">&lt;p&gt;Enfin ! Voilà la nouvelle version de Kiznet ! J&amp;#39;espère qu&amp;#39;elle vous plait, et
 je n&amp;#39;ai pas grand chose à dire, si ce n&amp;#39;est que j&amp;#39;ai passé du bon temps à la
@@ -3626,7 +3626,7 @@ jamais vous rencontrez des bugs ou si vous avez des suggestions, n&amp;#39;hési
  <entry>
      <title>Tadam !</title>
      <link href="http://thomas.pelletier.im/2008/11/tadam"/>
-     <updated>2008-11-22T00:00:00Z</updated>
+     <updated>2008-11-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/tadam</id>
      <content type="html">&lt;p&gt;Enfin ! Voilà c&amp;#39;est fait, comme vous pouvez vous en rendre compte, vous voici
 sur Kiznet.fr ! Au niveau hébergement, OVH et ses cgi, c&amp;#39;est pas encore ça,
@@ -3643,7 +3643,7 @@ nouveau tournant !&lt;/p&gt;
  <entry>
      <title>LifeDo</title>
      <link href="http://thomas.pelletier.im/2008/11/lifedo"/>
-     <updated>2008-11-22T00:00:00Z</updated>
+     <updated>2008-11-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/lifedo</id>
      <content type="html">&lt;p&gt;Voici &lt;a href=&quot;http://lifedo.alwaysdata.net&quot;&gt;LifeDo&lt;/a&gt;, ma dernière création (si tant
 est que l&amp;#39;on puisse nommer comme cela un site web de débutant). Le principe
@@ -3667,7 +3667,7 @@ brève. Bonne journée !&lt;/p&gt;
  <entry>
      <title>L&#8217;authentification</title>
      <link href="http://thomas.pelletier.im/2008/11/lauthentification"/>
-     <updated>2008-11-22T00:00:00Z</updated>
+     <updated>2008-11-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/lauthentification</id>
      <content type="html">&lt;p&gt;A la base, je pensais raconter tout ce que je pense à propos de ma
 problématique actuelle sur les moyens d&amp;#39;authentifications. Mais en fait, j&amp;#39;ai
@@ -3685,7 +3685,7 @@ beaucoup incomplet, j&amp;#39;en convient.&lt;/p&gt;
  <entry>
      <title>InteropÃ©rabilitÃ© : rÃ©flexions</title>
      <link href="http://thomas.pelletier.im/2008/11/interoperabilite-reflexions"/>
-     <updated>2008-11-22T00:00:00Z</updated>
+     <updated>2008-11-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/interoperabilite-reflexions</id>
      <content type="html">&lt;h2 id=&quot;le-commencement&quot;&gt;Le commencement &lt;a href=&quot;#le-commencement&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Je me suis intéressé à l&amp;#39;idée d&amp;#39;interopérabilité au commencement d&amp;#39;un projet
@@ -3732,7 +3732,7 @@ déplais pas, mais alors pas du tout !&lt;/p&gt;
  <entry>
      <title>Django et moi</title>
      <link href="http://thomas.pelletier.im/2008/11/django-et-moi"/>
-     <updated>2008-11-22T00:00:00Z</updated>
+     <updated>2008-11-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/django-et-moi</id>
      <content type="html">&lt;p&gt;Je ne sais pas si vous vous rappelez (ou si vous l&amp;#39;avez lu tout simplement),
 mais dans le dernier post, je parlais d&amp;#39;utiliser Django pour développer mon
@@ -3760,7 +3760,7 @@ m&amp;#39;aiguiller sur quelque point que ce soit.&lt;/p&gt;
  <entry>
      <title>Avancement de Kiznet</title>
      <link href="http://thomas.pelletier.im/2008/11/avancement-de-kiznet"/>
-     <updated>2008-11-22T00:00:00Z</updated>
+     <updated>2008-11-21T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/avancement-de-kiznet</id>
      <content type="html">&lt;p&gt;Voilà, le site est terminé et fonctionnel en local, j&amp;#39;ai pris un hébergement
 60gp de chez OVH (pour les liens voir deux posts avants), mon nom de domaine
@@ -3776,7 +3776,7 @@ arriverais probablement.&lt;/p&gt;
  <entry>
      <title>Xchat : Votre musique XMMS !</title>
      <link href="http://thomas.pelletier.im/2008/11/xchat-votre-musique-xmms"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/xchat-votre-musique-xmms</id>
      <content type="html">&lt;p&gt;Voici un petit script écrit en Perl qui affiche en tant qu&amp;#39;emote (/me) votre
 musique en cours de lecture sur XMMS. Pour l&amp;#39;installer, téléchargez-le (lien
@@ -3863,7 +3863,7 @@ téléchargement&lt;/a&gt;.&lt;/p&gt;
  <entry>
      <title>Xchat : Votre musique XMMS v0.2 !</title>
      <link href="http://thomas.pelletier.im/2008/11/xchat-votre-musique-xmms-v0-2"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/xchat-votre-musique-xmms-v0-2</id>
      <content type="html">&lt;p&gt;Alors voila. J&amp;#39;me suis rendu compte que le script que j&amp;#39;&amp;#39;ai écrit dans le post
 précédent n&amp;#39;est pas compatible avec les ID3v2. Voici la nouvelle version du
@@ -3875,7 +3875,7 @@ script. Lien :
  <entry>
      <title>Script Perl Edition de ID3 massive</title>
      <link href="http://thomas.pelletier.im/2008/11/script-perl-edition-de-id3-massive"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/script-perl-edition-de-id3-massive</id>
      <content type="html">&lt;p&gt;Je le met là comme mémo, même si il ne sert jamais à personne dans son
 intégralité.  C&amp;#39;est un script Perl qui m&amp;#39;a servit à renommé toute ma playlist
@@ -3962,7 +3962,7 @@ la programmation en langage Perl. La prochaine fois, j&amp;#39;essayerais en Pyt
  <entry>
      <title>Personnaliser Gnome</title>
      <link href="http://thomas.pelletier.im/2008/11/personnaliser-gnome"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/personnaliser-gnome</id>
      <content type="html">&lt;p&gt;Voici un petit outil très sympathique pour personnaliser un peu votre bureau
 GNOME que j&amp;#39;ai (re)découvert, j&amp;#39;ai cité : &lt;strong&gt;gnome-art&lt;/strong&gt;. Avec ce petit outil,
@@ -3976,7 +3976,7 @@ même !&lt;/p&gt;
  <entry>
      <title>Installation de virtualbox (officiel) sous Ubuntu Hardy Heron (8.04)</title>
      <link href="http://thomas.pelletier.im/2008/11/installation-de-virtualbox-officiel-sous-ubuntu-hardy-heron-8-04"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/installation-de-virtualbox-officiel-sous-ubuntu-hardy-heron-8-04</id>
      <content type="html">&lt;p&gt;Voici une petite méthode pour l&amp;#39;installation de VirtualBox:&lt;/p&gt;
 
@@ -3993,7 +3993,7 @@ même !&lt;/p&gt;
  <entry>
      <title>Firefox : problÃ¨me de barre d&#8217;adresse</title>
      <link href="http://thomas.pelletier.im/2008/11/firefox-probleme-de-barre-dadresse"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/firefox-probleme-de-barre-dadresse</id>
      <content type="html">&lt;p&gt;Après un &lt;code&gt;apt-get update&lt;/code&gt;, j&amp;#39;ai un problème un peu bizarre avec mon Firefox 3
 beta 5 d&amp;#39;Ubuntu : le contenu de la barre d&amp;#39;adresse ne correspondait pas avec
@@ -4006,7 +4006,7 @@ dossier qui porte un nom bizarre situé dans le dossier
  <entry>
      <title>Django : Python, c&#8217;est plus fort que toi !</title>
      <link href="http://thomas.pelletier.im/2008/11/django-python-cest-plus-fort-que-toi"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/django-python-cest-plus-fort-que-toi</id>
      <content type="html">&lt;p&gt;Aujourd&amp;#39;hui&amp;#39;&amp;#39;hui, je vais vous présenter &lt;a href=&quot;http://www.djangoproject.com/&quot;&gt;Django&lt;/a&gt;, &amp;quot;Le framework web pour les perfectionnistes sous pression&amp;quot; ! Avouez que c&amp;#39;&amp;#39;est déjà pas mal comme slogan.
 Je vais parler ici de mon expérience personnelle d&amp;#39;amateur qui pratique l&amp;#39;&amp;#39;informatique sur son temps libre. Donc tout ce que je peux raconter ici peut apparaître totalement FAUX à un expert en la matière, mais bon, faut bien se lancer un jour hein :) .
@@ -4037,7 +4037,7 @@ Pour le moment, je ne dispose pas encore d&amp;#39;&amp;#39;assez d&amp;#39;&amp
  <entry>
      <title>Avant Window</title>
      <link href="http://thomas.pelletier.im/2008/11/avant-window"/>
-     <updated>2008-11-21T00:00:00Z</updated>
+     <updated>2008-11-20T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/avant-window</id>
      <content type="html">&lt;p&gt;Après avoir testé plusieurs Docks comme &lt;a href=&quot;http://www.kiba-dock.org/&quot;&gt;Kibadock&lt;/a&gt;,
 ma préférence est allée à &lt;a href=&quot;http://awn-project.org/&quot;&gt;Avant Window Navigator&lt;/a&gt;
@@ -4079,7 +4079,7 @@ bzr co http://bazaar.launchpad.net/~awn-extras/awn-extras/trunk awn-extras
  <entry>
      <title>Web sÃ©mantique : dÃ©couverte</title>
      <link href="http://thomas.pelletier.im/2008/11/web-semantique-decouverte"/>
-     <updated>2008-11-05T00:00:00Z</updated>
+     <updated>2008-11-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/web-semantique-decouverte</id>
      <content type="html">&lt;h2 id=&quot;quotpourquoi-quot&quot;&gt;&amp;quot;Pourquoi ?&amp;quot; &lt;a href=&quot;#quotpourquoi-quot&quot;&gt;»&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;Déjà, on va s&amp;#39;intéresser à la question &amp;quot;pourquoi ?&amp;quot;. Non pas pourquoi le web
@@ -4141,7 +4141,7 @@ flou et à tester. Mais il ne faut pas désespérer ;) .&lt;/p&gt;
  <entry>
      <title>Problème avec Scrollkeeper (Ubuntu 7.10)</title>
      <link href="http://thomas.pelletier.im/2008/11/probleme-avec-scrollkeeper-ubuntu-7-10"/>
-     <updated>2008-11-05T00:00:00Z</updated>
+     <updated>2008-11-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/probleme-avec-scrollkeeper-ubuntu-7-10</id>
      <content type="html">&lt;p&gt;Si lors de vos installations utilisant aptitude vous obtenez des erreurs du
 genre:&lt;/p&gt;
@@ -4164,7 +4164,7 @@ fichier posant problème j&amp;#39;entends).&lt;/p&gt;
  <entry>
      <title>Les alias Bash</title>
      <link href="http://thomas.pelletier.im/2008/11/les-alias-bash"/>
-     <updated>2008-11-05T00:00:00Z</updated>
+     <updated>2008-11-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/les-alias-bash</id>
      <content type="html">&lt;p&gt;Les alias avec Bash, voila une méthode pratique ! Cette méthode permet de
 substituer une commande par une autre. Par exemple, si comme moi, vous avez
@@ -4181,7 +4181,7 @@ rajoutez la ligne que vous venez d&amp;#39;entrer pour définir l&amp;#39;alias 
  <entry>
      <title>Compiz Fusion</title>
      <link href="http://thomas.pelletier.im/2008/11/compiz-fusion"/>
-     <updated>2008-11-05T00:00:00Z</updated>
+     <updated>2008-11-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/compiz-fusion</id>
      <content type="html">&lt;p&gt;Compiz Fusion est un gestionnaire de fenêtre qui met à disposition des
 utilisateurs des effets graphiques très avancés tout en libérant le CPU d&amp;#39;une
@@ -4203,7 +4203,7 @@ informations croustillantes sur le paramétrage de Compiz sur le forum officiel
  <entry>
      <title>Changement automatique de fond d&#8217;écran Gnome</title>
      <link href="http://thomas.pelletier.im/2008/11/changement-automatique-de-fond-decran-gnome"/>
-     <updated>2008-11-05T00:00:00Z</updated>
+     <updated>2008-11-04T23:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/11/changement-automatique-de-fond-decran-gnome</id>
      <content type="html">&lt;p&gt;Voici un petit script que j&amp;#39;ai réalisé rapidement pour que mes fonds d&amp;#39;écran
 Gnome tournent automatiquement. Vous pouvez le télécharger
@@ -4250,7 +4250,7 @@ quels qu&amp;#39;ils soient avec ce script, merci de m&amp;#39;envoyer un mail.&
  <entry>
      <title>Configuration Emacs</title>
      <link href="http://thomas.pelletier.im/2008/09/configuration-emacs"/>
-     <updated>2008-09-04T23:00:00Z</updated>
+     <updated>2008-09-04T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/09/configuration-emacs</id>
      <content type="html">&lt;p&gt;Voici un exemple de configuration que je trouve pratique. Je le laisse ici
 comme mémo :)&lt;/p&gt;
@@ -4262,7 +4262,7 @@ comme mémo :)&lt;/p&gt;
  <entry>
      <title>Ego VS PageRank</title>
      <link href="http://thomas.pelletier.im/2008/09/ego-vs-pagerank"/>
-     <updated>2008-09-01T23:00:00Z</updated>
+     <updated>2008-09-01T22:00:00Z</updated>
      <id>http://thomas.pelletier.im/2008/09/ego-vs-pagerank</id>
      <content type="html">&lt;p&gt;&lt;img src=&quot;/assets/images/posts/experimental-blogeur1.jpg&quot; alt=&quot;Blogeur vs pagerank&quot;&gt;&lt;/p&gt;
 </content>
